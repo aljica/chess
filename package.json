@@ -1,0 +1,31 @@
+{
+  "name": "chess",
+  "version": "1.0.0",
+  "description": "A free chess website written in Javascript (Node - Express backend &amp; Vue frontend)",
+  "main": "index.js",
+  "scripts": {
+    "client:build": "cd client && npm run build",
+    "server:start": "cd server && npm run start",
+    "start": "npm run client:build && npm run server:start",
+    "client:install": "cd client && npm install",
+    "server:install": "cd server && npm install",
+    "install": "npm run client:install && npm run server:install",
+    "client:lint": "cd client && npm run lint",
+    "server:lint": "cd server && npm run lint",
+    "lint": "npm run client:lint && npm run server:lint",
+    "client:lint:fix": "cd client && npm run lint:fix",
+    "server:lint:fix": "cd server && npm run lint:fix",
+    "lint:fix": "npm run client:lint:fix && npm run server:lint:fix"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aljica/chess.git"
+  },
+  "author": "Almir Aljic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aljica/chess/issues"
+  },
+  "homepage": "https://github.com/aljica/chess#readme"
+}
