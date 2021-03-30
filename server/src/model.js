@@ -95,8 +95,6 @@ exports.createGame = async () => {
   });
   const newGame = new Game();
   games[newGame.id] = newGame;
-  console.log('from model');
-  console.log(gameID);
   return newGame.id;
 };
 
