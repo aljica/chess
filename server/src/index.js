@@ -95,9 +95,7 @@ io.on('connection', (socket) => {
   });
 });
 
-io.on('disconnect', (socket) => {
-  console.log(socket.handshake.session.cookie);
-});
+io.on('disconnect', () => console.log('disconnected'));
 
 // Start server
 httpServer.listen(port, () => {

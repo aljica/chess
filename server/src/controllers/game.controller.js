@@ -14,11 +14,8 @@ router.get('/createGame', (req, res) => {
 });
 
 router.get('/joinGame', (req, res) => {
-  console.log('socketid');
-  console.log(req.session.socketID);
   model.addPlayerToGame(0, req.session.socketID);
   const players = model.findGame(0).players;
-  console.log(players);
   res.status(200).send({ list: players });
 });
 

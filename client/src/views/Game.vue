@@ -1,9 +1,11 @@
 <template>
   <div class="text-box col-md-4 col-md-offset-4" style="text-align: center">
     <h1>Number Guess Game</h1>
-    <div>
-      <h1 v-if="checkWaiting()">Waiting for player</h1>
-      <h1 v-else>Connected!</h1>
+    <div v-if="checkWaiting()">
+      <h1>Waiting for player</h1>
+    </div>
+    <div v-else>
+      <h1>Connected!</h1>
     </div>
     <div>include form here for number submission depending on whose turn it is</div>
   </div>
@@ -16,6 +18,7 @@ export default {
   data() {
     return {
       gameID: this.$route.params.gameID,
+      number: null,
       waiting: true,
       players: [null, null],
       socket: null,
