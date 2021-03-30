@@ -17,42 +17,31 @@ export default {
     return {
       gameID: this.$route.params.gameID,
       waiting: true,
-      connections: [null, null],
+      players: [null, null],
       socket: null,
     };
   },
   methods: {
     checkWaiting() {
-      if (this.connections[0] === null || this.connections[1] === null) return true;
+      console.log(this.players);
+      if (this.players[0] === null || this.players[1] === null) return true;
       return false;
     },
-    get() {
-      fetch('/api/getSession')
+    async join() {
+      const players = await fetch('/api/joinGame')
         .then((res) => res.json())
-        .then((data) => {
-          console.log('socketID');
-          console.log(data);
-          if (this.user1 === null) {
-            console.log('user1');
-            this.user1 = data.socketID;
-            console.log(this.user1);
-          } else if (this.user2 === null) {
-            console.log('user2');
-            this.user2 = data.socketID;
-            console.log(this.user2);
-          }
-        })
+        .then((data) => data.players)
         .catch(console.error);
+      this.players = players;
     },
   },
   created() {
-    // this.get();
+    this.join();
 
     this.socket = this.$root.socket;
-    console.log(this.socket);
-    /* this.socket.on('connection', () => {
-      this.get();
-    }); */
+    this.socket.on('updatePlayers', (players) => {
+      this.players = players;
+    });
   },
 };
 </script>

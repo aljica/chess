@@ -86,6 +86,11 @@ exports.createGame = (id) => {
   return games[id].id;
 };
 
+exports.addPlayerToGame = (id, socketID) => {
+  games[id].addPlayer(socketID);
+  this.io.emit('updatePlayers', games[id].players);
+};
+
 exports.allGames = () => Object.values(games);
 
 exports.findGame = (id) => games[id];

@@ -12,7 +12,7 @@
   addPlayer(socketID) {
     if (this.players[0] === null) {
       this.players[0] = socketID;
-    } else if (this.players[1] === null) {
+    } else if (this.players[1] === null && this.players[0] !== socketID) {
       this.players[1] = socketID;
     }
   }
