@@ -29,6 +29,8 @@ export default {
         .then((res) => res.json())
         .then((data) => data.gameID)
         .catch(console.error);
+      console.log('logging from lobby');
+      console.log(gameID);
       this.$router.push(`/game/${gameID}`);
     },
     getGames() {

@@ -38,6 +38,8 @@ export default {
     },
   },
   created() {
+    console.log('log from game');
+    console.log(this.$route.params.gameID);
     this.join();
 
     this.socket = this.$root.socket;

@@ -82,11 +82,23 @@ exports.findUser = (name) => users[name];
 
 /* Game Rooms Code Below */ 
 
-exports.createGame = () => {
+exports.createGame = async () => {
+  // async-await makes this return an [object Object]?
+  // remove async and db stuff and everything's fine again...
+  const gameID = Math.random();
+  const randomNum = Math.floor(Math.random() * 10 + 1)
+  await db.run('INSERT INTO games VALUES(?, ?, ?, ?, ?)', [gameID, null, null, randomNum, 1], function(err) {
+    if (err) {
+      console.log(err.message);
+    }
+    console.log('inserted!');
+  });
   const newGame = new Game();
   games[newGame.id] = newGame;
+  console.log('from model');
+  console.log(gameID);
   return newGame.id;
-}
+};
 
 exports.addPlayerToGame = (id, socketID) => {
   games[id].addPlayer(socketID);

@@ -9,7 +9,8 @@ router.get('/gameList', (req, res) => {
 });
 
 router.get('/createGame', (req, res) => {
-  const gameID = model.createGame();
+  const gameID = model.createGame()
+    .then((id) => console.log(id));
   console.log('gameid from odel');
   console.log(gameID);
   res.status(200).send({ gameID });
