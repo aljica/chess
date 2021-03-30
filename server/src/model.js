@@ -81,10 +81,11 @@ exports.findUser = (name) => users[name];
 
 /* Game Rooms Code Below */ 
 
-exports.createGame = (id) => {
-  games[id] = new Game();
-  return games[id].id;
-};
+exports.createGame = () => {
+  const newGame = new Game();
+  games[newGame.id] = newGame;
+  return newGame.id;
+}
 
 exports.addPlayerToGame = (id, socketID) => {
   games[id].addPlayer(socketID);
@@ -93,6 +94,12 @@ exports.addPlayerToGame = (id, socketID) => {
 
 exports.allGames = () => Object.values(games);
 
-exports.findGame = (id) => games[id];
+exports.findGame = (gameID) => {
+  gamesAsList = Object.values(games);
+  const game = gamesAsList.filter((game) => game.id == gameID)[0];
+  return game;
+};
+
+// exports.findGame = (id) => games[id];
 
 exports.joinGame = (id, socketID) => games[id].addPlayer(socketID);

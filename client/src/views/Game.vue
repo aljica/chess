@@ -18,7 +18,6 @@ export default {
   data() {
     return {
       gameID: this.$route.params.gameID,
-      number: null,
       waiting: true,
       players: [null, null],
       socket: null,
@@ -26,12 +25,11 @@ export default {
   },
   methods: {
     checkWaiting() {
-      console.log(this.players);
       if (this.players[0] === null || this.players[1] === null) return true;
       return false;
     },
     async join() {
-      const players = await fetch('/api/joinGame')
+      const players = await fetch(`/api/joinGame/${this.gameID}`)
         .then((res) => res.json())
         .then((data) => data.players)
         .catch(console.error);

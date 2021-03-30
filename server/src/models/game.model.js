@@ -7,6 +7,7 @@
     this.number = Math.floor(Math.random() * 10 + 1);
     this.players = [null, null]; // SocketIDs
     this.socketID = null;
+    this.numGuesses = 0;
   }
 
   addPlayer(socketID) {
@@ -17,6 +18,9 @@
     }
   }
 
+  checkGuess(guess) {
+    return guess === this.number;
+  }
 }
 
 module.exports = Game;
