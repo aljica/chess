@@ -93,9 +93,9 @@ io.on('connection', (socket) => {
     if (err) console.error(err);
     else console.debug(`Saved socketID: ${socket.handshake.session.socketID}`);
   });
-});
 
-io.on('disconnect', () => console.log('disconnected'));
+  socket.on('disconnect', () => console.log('disconnected'));
+});
 
 // Start server
 httpServer.listen(port, () => {

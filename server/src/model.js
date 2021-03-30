@@ -1,5 +1,6 @@
 const User = require('./models/user.model');
 const Game = require('./models/game.model');
+const db = require('./database/db');
 
 let users = {};
 let games = {};

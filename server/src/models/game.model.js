@@ -8,6 +8,7 @@
     this.players = [null, null]; // SocketIDs
     this.socketID = null;
     this.numGuesses = 0;
+    this.turn = 0; // Whose turn it is
   }
 
   addPlayer(socketID) {

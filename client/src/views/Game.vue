@@ -21,6 +21,7 @@ export default {
       waiting: true,
       players: [null, null],
       socket: null,
+      turn: null,
     };
   },
   methods: {
