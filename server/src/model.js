@@ -95,7 +95,7 @@ exports.createGame = async () => {
   });
   const newGame = new Game();
   games[newGame.id] = newGame;
-  return newGame.id;
+  return gameID;
 };
 
 exports.addPlayerToGame = (id, socketID) => {
