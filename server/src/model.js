@@ -82,24 +82,27 @@ exports.findUser = (name) => users[name];
 
 /* Game Rooms Code Below */ 
 
-exports.createGame = async () => {
-  const gameID = Math.random();
-  const startingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'; // Starting chess position
-  const randomNum = Math.floor(Math.random() * 10 + 1)
-  await db.run('INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)', [gameID, null, null, startingFEN, '', 0], function(err) {
-    if (err) {
-      console.log(err.message);
-    }
-    console.log('inserted!');
-  });
+exports.createGame = () => {
+  const gameID = db.insertNewChessGame();
   const newGame = new Game();
   games[newGame.id] = newGame;
   return gameID;
 };
 
-exports.addPlayerToGame = (id, socketID) => {
-  games[id].addPlayer(socketID);
-  this.io.emit('updatePlayers', games[id].players);
+exports.addPlayerToGame = async (gameID, socketID) => {
+  /* const players = await db.get('SELECT sock1, sock2 FROM games WHERE id=?', [gameID], function(err, row) {
+    const sock1 = row.sock1; const sock2 = row.sock2;
+    if (sock1 === null) {
+      console.log(sock1);
+      // await db.run('UPDATE games SET ')
+    }
+  }); */
+  const sockets = await db.getSockets(gameID);
+  await console.log(sockets);
+  return sockets;
+
+  // games[gameID].addPlayer(socketID);
+  // this.io.emit('updatePlayers', games[gameID].players);
 };
 
 exports.allGames = () => Object.values(games);
@@ -109,7 +112,5 @@ exports.findGame = (gameID) => {
   const game = gamesAsList.filter((game) => game.id == gameID)[0];
   return game;
 };
-
-// exports.findGame = (id) => games[id];
 
 exports.joinGame = (id, socketID) => games[id].addPlayer(socketID);
