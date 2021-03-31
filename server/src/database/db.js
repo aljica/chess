@@ -25,19 +25,16 @@ exports.insertNewChessGame = async () => {
     if (err) {
       console.log(err.message);
     }
-    console.log('inserted!');
   });
   return gameID;
 };
 
 exports.getSockets = async (gameID) => {
-  const sockets = await db.get('SELECT sock1, sock2 FROM games WHERE id=?', [gameID], function(err, row) {
+  return await db.get('SELECT sock1, sock2 FROM games WHERE id=?', [gameID], function(err, row) {
     if (err) {
       return err;
     }
     const sockets = [row.sock1, row.sock2];
     return sockets;
   });
-  return sockets;
 };
-

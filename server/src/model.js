@@ -82,8 +82,8 @@ exports.findUser = (name) => users[name];
 
 /* Game Rooms Code Below */ 
 
-exports.createGame = () => {
-  const gameID = db.insertNewChessGame();
+exports.createGame = async () => {
+  const gameID = await db.insertNewChessGame();
   const newGame = new Game();
   games[newGame.id] = newGame;
   return gameID;
