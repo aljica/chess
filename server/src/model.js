@@ -84,8 +84,9 @@ exports.findUser = (name) => users[name];
 
 exports.createGame = async () => {
   const gameID = Math.random();
+  const startingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'; // Starting chess position
   const randomNum = Math.floor(Math.random() * 10 + 1)
-  await db.run('INSERT INTO games VALUES(?, ?, ?, ?, ?)', [gameID, null, null, randomNum, 1], function(err) {
+  await db.run('INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)', [gameID, null, null, startingFEN, '', 0], function(err) {
     if (err) {
       console.log(err.message);
     }

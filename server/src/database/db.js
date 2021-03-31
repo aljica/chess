@@ -15,7 +15,10 @@ db.serialize(() => {
   db.run('INSERT INTO users VALUES("sara", "pass2")');
 
   db.run('DROP TABLE IF EXISTS games');
-  db.run('CREATE TABLE games (id INTEGER, playersocket1 TEXT UNIQUE, playersocket2 TEXT UNIQUE, number INTEGER, turn INTEGER)');
+  // 0 indicates player 1's turn, 1 player 2's turn.
+  // On server reset, sock1 and sock2 should be automatically reset.
+  // Rows that were inserted long enough ago should migrate to a history table/be deleted.
+  db.run('CREATE TABLE games (id INTEGER UNIQUE, sock1 TEXT UNIQUE, sock2 TEXT UNIQUE, FEN TEXT, moves TEXT, turn INTEGER)');
 });
 
 module.exports = db;
