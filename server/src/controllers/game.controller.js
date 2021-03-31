@@ -8,8 +8,8 @@ router.get('/gameList', (req, res) => {
   res.status(200).json({ list: games });
 });
 
-router.get('/createGame', async (req, res) => {
-  const gameID = await model.createGame();
+router.get('/createGame', (req, res) => {
+  const gameID = model.createGame();
   res.status(200).send({ gameID });
 });
 
