@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.get('/gameList', (req, res) => {
   const games = model.getGames();
-  console.log(games);
   res.status(200).json({ list: games });
 });
 
@@ -13,8 +12,6 @@ router.get('/createGame', (req, res) => {
   // Check if user already created a game in the last X seconds.
   // Should have a database table that keeps track of sessionID and timestamp of latest game creation.
   const gameID = model.createGame();
-  console.log('gameid');
-  console.log(gameID);
   res.status(200).send({ gameID });
 });
 
