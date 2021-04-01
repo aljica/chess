@@ -9,26 +9,26 @@ let games = {};
  * unregisteredSockets is used as a temporary pool of sockets
  * that belong to users who are yet to login.
  */
- let nextUnregisteredSocketID = 0;
- let unregisteredSockets = {};
- 
- // Will be initialized in the exports.init function
- exports.io = undefined;
- 
- /**
+let nextUnregisteredSocketID = 0;
+let unregisteredSockets = {};
+
+// Will be initialized in the exports.init function
+exports.io = undefined;
+
+/**
   * Initialize the model
   * @param { { io: SocketIO.Server} } config - The configurations needed to initialize the model.
   * @returns {void}
   */
- exports.init = ({ io }) => {
-   exports.io = io;
- };
+exports.init = ({ io }) => {
+  exports.io = io;
+};
 
- /**
+/**
  * Add a socket.io socket to the pool of unregistered sockets
  * @param {SocketIO.Socket} socket - The socket.io socket to add to the pool.
  * @returns {Number} The ID of the socket in the pool of unregistered sockets.
- */
+*/
 exports.addUnregisteredSocket = (socket) => {
   const socketID = nextUnregisteredSocketID;
   nextUnregisteredSocketID += 1;
@@ -80,7 +80,7 @@ exports.updateUserSocket = (name, socket) => {
  */
 exports.findUser = (name) => users[name];
 
-/* Game Rooms Code Below */ 
+/* Game Rooms Code Below */
 
 exports.createGame = () => {
   const gameID = db.insertNewChessGame();
@@ -105,9 +105,9 @@ exports.addPlayerToGame = (gameID, socketID) => {
 exports.allGames = () => Object.values(games);
 
 exports.findGame = (gameID) => {
-  gamesAsList = Object.values(games);
-  const game = gamesAsList.filter((game) => game.id == gameID)[0];
-  return game;
+  const gamesAsList = Object.values(games);
+  const chosenGame = gamesAsList.filter((game) => game.id == gameID)[0];
+  return chosenGame;
 };
 
 exports.joinGame = (id, socketID) => games[id].addPlayer(socketID);

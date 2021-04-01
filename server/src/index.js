@@ -61,21 +61,22 @@ app.use('/api', auth.router);
 
 // Init model
 const model = require('./model.js');
+
 model.init({ io });
 
 // Handle connected socket.io sockets
 io.on('connection', (socket) => {
-  /*console.log(socket.handshake.session.cookie);
+  /* console.log(socket.handshake.session.cookie);
   console.log(socket.handshake.sessionID);
   if (socket.handshake.session.cookie.socketID === undefined) {
     console.log('indeed');
     socket.handshake.session.cookie.socketID = socket.handshake.sessionID;
   }
-  console.log(socket.handshake.session.cookie);*/
+  console.log(socket.handshake.session.cookie); */
 
   // This function serves to bind socket.io connections to user models
 
-  /*if (socket.handshake.session.userID
+  /* if (socket.handshake.session.userID
     && model.findUser(socket.handshake.session.userID) !== undefined
   ) {
     // If the current user already logged in and then reloaded the page
@@ -86,7 +87,7 @@ io.on('connection', (socket) => {
       if (err) console.error(err);
       else console.debug(`Saved socketID: ${socket.handshake.session.socketID}`);
     });
-  }*/
+  } */
 
   socket.handshake.session.socketID = socket.handshake.sessionID;
   socket.handshake.session.save((err) => {

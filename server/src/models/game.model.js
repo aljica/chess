@@ -1,7 +1,7 @@
 /**
  * @class Game
  */
- class Game {
+class Game {
   constructor() {
     this.id = Math.random();
     this.number = Math.floor(Math.random() * 10 + 1);

@@ -1,7 +1,7 @@
 /**
  * @class User
  */
- class User {
+class User {
   constructor(name) {
     this.socket = null;
     this.name = name;

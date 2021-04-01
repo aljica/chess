@@ -11,7 +11,8 @@ exports.insertNewChessGame = () => {
   const startingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'; // Starting chess position
   db.prepare('INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)').run(gameID, null, null, startingFEN, '', 0);
   /* try {
-    db.prepare('INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)').run(gameID, null, null, startingFEN, '', 0);
+    db.prepare('INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)')
+    // .run(gameID, null, null, startingFEN, '', 0);
   } catch (e) {
     return false; // In case gameID already exists (highly unlikely!).
   } */
@@ -22,6 +23,4 @@ exports.getSockets = (gameID) => db.prepare('SELECT sock1, sock2 FROM games WHER
 
 exports.addPlayerSocketToGame = (gameID, socketID, sockX) => db.prepare(`UPDATE games SET ${sockX} = ? WHERE id=?`).run(socketID, gameID);
 
-exports.getAllGames = () => {
-  return db.prepare('SELECT * FROM games').all();
-}
+exports.getAllGames = () => db.prepare('SELECT * FROM games').all();
