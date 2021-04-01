@@ -18,6 +18,7 @@ router.get('/createGame', (req, res) => {
 router.get('/joinGame/:gameID', (req, res) => {
   const { gameID } = req.params;
   const { socketID } = req.session;
+  console.log(req.session);
   // Make sure socketID is not undefined, if so, return 401.
   console.log('socketid from joingame');
   console.log(socketID);

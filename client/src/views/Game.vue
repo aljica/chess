@@ -31,7 +31,7 @@ export default {
     },
     async join() {
       try {
-        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`);
+        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'same-origin' });
         const data = await response.json();
         console.log('data');
         console.log(data);

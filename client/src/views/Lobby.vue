@@ -26,7 +26,7 @@ export default {
   methods: {
     async createGame() {
       try {
-        const response = await fetch('http://localhost:8989/api/createGame');
+        const response = await fetch('http://localhost:8989/api/createGame', { credentials: 'include' });
         const data = await response.json();
         this.$router.push(`/game/${data.gameID}`);
       } catch (e) {
@@ -34,7 +34,7 @@ export default {
       }
     },
     getGames() {
-      fetch('http://localhost:8989/api/gameList')
+      fetch('http://localhost:8989/api/gameList', { credentials: 'include' })
         .then((res) => res.json())
         .then((data) => {
           this.games = data.list;

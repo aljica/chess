@@ -25,7 +25,12 @@ const io = require('socket.io')(httpServer); // Creates socket.io app
 var cors = require('cors');
 
 // Add headers. So that frontend can access backend API.
-app.use(cors({origin: 'http://localhost:8080'}));
+const corsOptions = {
+  origin: true,
+  allowedHeaders: true,
+  credentials: true
+};
+app.use(cors(corsOptions));
 
 // Setup middleware
 app.use(betterLogging.expressMiddleware(console, {
@@ -44,7 +49,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Setup session
 const session = expressSession({
-  name: 'mycookie',
+  name: 'session',
   secret: 'Super secret! Shh! Do not tell anyone...',
   resave: true,
   saveUninitialized: true,
