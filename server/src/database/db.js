@@ -14,7 +14,7 @@ exports.insertNewChessGame = () => {
 };
 
 exports.getSockets = (gameID) => {
-  return db.prepare('SELECT * FROM games WHERE id=?').get(gameID);
+  return db.prepare('SELECT sock1, sock2 FROM games WHERE id=?').get(gameID);
 };
 
 exports.addPlayerSocketToGame = (gameID, socketID, sockX) => {

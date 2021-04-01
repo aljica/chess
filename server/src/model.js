@@ -91,14 +91,8 @@ exports.createGame = () => {
 
 exports.addPlayerToGame = (gameID, socketID) => {
   const sockets = db.getSockets(gameID);
-  let playerSocketNumber = null; // Determines whether to add to sock1 or sock2
-  console.log('from model');
-  console.log(sockets);
   if (sockets.sock1 === null) {
-    console.log('true');
-    let playerSocketNumber = 1;
     db.addPlayerSocketToGame(gameID, socketID, 'sock1');
-    console.log('added');
   } else if (sockets.sock2 === null) {
     db.addPlayerSocketToGame(gameID, socketID, 'sock2');
   }
