@@ -21,6 +21,12 @@ const app = express(); // Creates express app
 const httpServer = http.Server(app);
 const io = require('socket.io')(httpServer); // Creates socket.io app
 
+// Required 
+var cors = require('cors');
+
+// Add headers. So that frontend can access backend API.
+app.use(cors({origin: 'http://localhost:8080'}));
+
 // Setup middleware
 app.use(betterLogging.expressMiddleware(console, {
   ip: { show: true, color: Theme.green.base },
@@ -50,7 +56,7 @@ io.use(socketIOSession(session, {
 }));
 
 // Serve client
-app.use(express.static(publicPath));
+//app.use(express.static(publicPath));
 
 // Bind REST controllers to /api/*
 const game = require('./controllers/game.controller.js');

@@ -10,6 +10,7 @@ router.get('/gameList', (req, res) => {
 
 router.get('/createGame', (req, res) => {
   const gameID = model.createGame();
+  console.log(gameID);
   res.status(200).send({ gameID });
 });
 

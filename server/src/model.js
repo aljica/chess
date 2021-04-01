@@ -89,7 +89,7 @@ exports.createGame = () => db.insertNewChessGame();
 /**
  * Returns the user object with the given name.
  * @param {Integer, String} - (gameID, socketID): ID of the game and unique ID of user's socket.
- * @returns {List} sockets - A two-element list of socket IDs.
+ * @returns {List/Boolean} sockets - A two-element list of socket IDs, or false if there are already two players in the game.
  */
 exports.addPlayerToGame = (gameID, socketID) => {
   const sockets = db.getSockets(gameID);
@@ -97,6 +97,8 @@ exports.addPlayerToGame = (gameID, socketID) => {
     db.addPlayerSocketToGame(gameID, socketID, 'sock1');
   } else if (sockets.sock2 === null) {
     db.addPlayerSocketToGame(gameID, socketID, 'sock2');
+  } else {
+    return false;
   }
   return sockets;
   // this.io.emit('updatePlayers', games[gameID].players);

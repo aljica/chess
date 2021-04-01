@@ -29,8 +29,8 @@ export default {
       if (this.players[0] === null || this.players[1] === null) return true;
       return false;
     },
-    async join() {
-      const players = await fetch(`/api/joinGame/${this.gameID}`)
+    join() {
+      const players = fetch(`http://localhost:8989/api/joinGame/${this.gameID}`)
         .then((res) => res.json())
         .then((data) => data.players)
         .catch(console.error);
