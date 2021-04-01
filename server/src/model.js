@@ -84,10 +84,7 @@ exports.findUser = (name) => users[name];
  * @param {void}
  * @returns {Int/Boolean} gameID - The ID of the newly created game, or false if creation not successful.
  */
-exports.createGame = () => {
-  const gameID = db.insertNewChessGame();
-  return gameID;
-};
+exports.createGame = () => db.insertNewChessGame();
 
 /**
  * Returns the user object with the given name.
