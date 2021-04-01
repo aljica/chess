@@ -24,14 +24,14 @@ export default {
     };
   },
   methods: {
-    createGame() {
-      const gameID = fetch('http://localhost:8989/api/createGame')
-        .then((res) => res.json())
-        .then((data) => data.gameID)
-        .catch(console.error);
-      console.log('logging from lobby');
-      console.log(gameID);
-      this.$router.push(`/game/${gameID}`);
+    async createGame() {
+      try {
+        const response = await fetch('http://localhost:8989/api/createGame');
+        const data = await response.json();
+        this.$router.push(`/game/${data.gameID}`);
+      } catch (e) {
+        console.log(e);
+      }
     },
     getGames() {
       fetch('http://localhost:8989/api/gameList')

@@ -104,10 +104,6 @@ exports.addPlayerToGame = (gameID, socketID) => {
   // this.io.emit('updatePlayers', games[gameID].players);
 };
 
-exports.findGame = (gameID) => {
-  const gamesAsList = Object.values(games);
-  const chosenGame = gamesAsList.filter((game) => game.id == gameID)[0];
-  return chosenGame;
-};
+exports.getGames = () => db.getAllGames();
 
-exports.joinGame = (id, socketID) => games[id].addPlayer(socketID);
+exports.getPlayersInGame = (gameID) => db.getSockets(gameID);

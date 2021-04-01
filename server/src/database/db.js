@@ -21,4 +21,4 @@ exports.getSockets = (gameID) => db.prepare('SELECT sock1, sock2 FROM games WHER
 
 exports.addPlayerSocketToGame = (gameID, socketID, sockX) => db.prepare(`UPDATE games SET ${sockX} = ? WHERE id=?`).run(socketID, gameID);
 
-exports.getAllGames = () => db.prepare('SELECT * FROM games').all();
+exports.getAllGames = () => db.prepare('SELECT id FROM games').all();

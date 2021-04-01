@@ -29,17 +29,19 @@ export default {
       if (this.players[0] === null || this.players[1] === null) return true;
       return false;
     },
-    join() {
-      const players = fetch(`http://localhost:8989/api/joinGame/${this.gameID}`)
-        .then((res) => res.json())
-        .then((data) => data.players)
-        .catch(console.error);
-      this.players = players;
+    async join() {
+      try {
+        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`);
+        const data = await response.json();
+        console.log('data');
+        console.log(data);
+        this.players = data.players;
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   created() {
-    console.log('log from game');
-    console.log(this.$route.params.gameID);
     this.join();
 
     this.socket = this.$root.socket;
