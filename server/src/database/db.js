@@ -15,7 +15,6 @@ exports.insertNewChessGame = () => {
   } catch(e) {
     return false; // In case gameID already exists (highly unlikely!).
   }
-  
   return gameID;
 };
 
