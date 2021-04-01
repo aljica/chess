@@ -2,9 +2,6 @@ const User = require('./models/user.model');
 const Game = require('./models/game.model');
 const db = require('./database/db');
 
-let users = {};
-let games = {};
-
 /**
  * unregisteredSockets is used as a temporary pool of sockets
  * that belong to users who are yet to login.
@@ -82,13 +79,21 @@ exports.findUser = (name) => users[name];
 
 /* Game Rooms Code Below */
 
+/**
+ * Returns the user object with the given name.
+ * @param {void}
+ * @returns {Int/Boolean} gameID - The ID of the newly created game, or false if creation not successful.
+ */
 exports.createGame = () => {
   const gameID = db.insertNewChessGame();
-  const newGame = new Game();
-  games[newGame.id] = newGame;
   return gameID;
 };
 
+/**
+ * Returns the user object with the given name.
+ * @param {Integer, String} - (gameID, socketID): ID of the game and unique ID of user's socket.
+ * @returns {List} sockets - A two-element list of socket IDs.
+ */
 exports.addPlayerToGame = (gameID, socketID) => {
   const sockets = db.getSockets(gameID);
   if (sockets.sock1 === null) {
@@ -97,12 +102,8 @@ exports.addPlayerToGame = (gameID, socketID) => {
     db.addPlayerSocketToGame(gameID, socketID, 'sock2');
   }
   return sockets;
-
-  // games[gameID].addPlayer(socketID);
   // this.io.emit('updatePlayers', games[gameID].players);
 };
-
-exports.allGames = () => Object.values(games);
 
 exports.findGame = (gameID) => {
   const gamesAsList = Object.values(games);
