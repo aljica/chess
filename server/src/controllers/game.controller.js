@@ -17,8 +17,17 @@ router.get('/createGame', (req, res) => {
 
 router.get('/joinGame/:gameID', (req, res) => {
   const { gameID } = req.params;
-  const { socketID } = req.session;
-  console.log(req.session);
+  const { socketID } = req.sessionStore;
+  const arr = Object.values(req.sessionStore);
+  const x = Object.values(arr[3]);
+  const y = Object.values(x);
+  const p = y[1];
+  let ob = JSON.parse(p);
+  console.log(ob.socketID);
+
+  console.log(p);
+  const {"cookie": foo} = p;
+  console.log(p[1]);
   // Make sure socketID is not undefined, if so, return 401.
   console.log('socketid from joingame');
   console.log(socketID);
