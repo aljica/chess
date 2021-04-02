@@ -84,7 +84,12 @@ exports.findUser = (name) => users[name];
  * @param {void}
  * @returns {Int/Boolean} gameID - The ID of the newly created game, or false if creation not successful.
  */
-exports.createGame = () => db.insertNewChessGame();
+exports.createGame = () => {
+  const gameID = db.insertNewChessGame();
+  this.io.emit('updateGames', this.getGames());
+  exports.io.emit('updateRandom', 4);
+  return gameID;
+};
 
 /**
  * Returns the user object with the given name.
@@ -92,7 +97,7 @@ exports.createGame = () => db.insertNewChessGame();
  * @returns {List/Boolean} sockets - A two-element list of socket IDs, or false if there are already two players in the game.
  */
 exports.addPlayerToGame = (gameID, socketID) => {
-  const sockets = db.getSockets(gameID);
+  const sockets = db.getSessionIDs(gameID);
   if (sockets.sock1 === null) {
     db.addPlayerSocketToGame(gameID, socketID, 'sock1');
   } else if (sockets.sock2 === null) {
@@ -100,10 +105,12 @@ exports.addPlayerToGame = (gameID, socketID) => {
   } else {
     return false;
   }
+  // this.io.emit('updatePlayers', sockets);
   return sockets;
-  // this.io.emit('updatePlayers', games[gameID].players);
 };
 
-exports.getGames = () => db.getAllGames();
+exports.getGames = () => {
+  return db.getAllGames();
+};
 
-exports.getPlayersInGame = (gameID) => db.getSockets(gameID);
+exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);

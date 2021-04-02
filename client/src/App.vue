@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <top :socket='socket'></top>
     <nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
       <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->

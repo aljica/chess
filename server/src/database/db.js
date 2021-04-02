@@ -17,7 +17,7 @@ exports.insertNewChessGame = () => {
   }
 };
 
-exports.getSockets = (gameID) => db.prepare('SELECT sock1, sock2 FROM games WHERE id=?').get(gameID);
+exports.getSessionIDs = (gameID) => db.prepare('SELECT sock1, sock2 FROM games WHERE id=?').get(gameID);
 
 exports.addPlayerSocketToGame = (gameID, socketID, sockX) => db.prepare(`UPDATE games SET ${sockX} = ? WHERE id=?`).run(socketID, gameID);
 

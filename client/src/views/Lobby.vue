@@ -11,6 +11,7 @@
         </div>
       </div>
     <input class="btn btn-default" type="submit" v-on:click="createGame()" value="Create New Game"/>
+    <h1>{{ this.random }}</h1>
   </div>
 </template>
 
@@ -21,6 +22,7 @@ export default {
   data() {
     return {
       games: [],
+      random: 2,
     };
   },
   methods: {
@@ -43,6 +45,14 @@ export default {
     },
   },
   created() {
+    /* this.socket = this.$root.socket;
+    this.socket.on('updateRandom', (r) => {
+      this.random = r;
+    }); */
+    this.$socket.on('updateRandom', (r) => {
+      this.random = r;
+    });
+
     this.getGames();
   },
 };

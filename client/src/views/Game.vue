@@ -30,12 +30,12 @@ export default {
       return false;
     },
     async join() {
+      const self = this;
       try {
-        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'same-origin' });
+        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'include' }); // 'same-origin' on credentials? if so, why?
         const data = await response.json();
-        console.log('data');
-        console.log(data);
-        this.players = data.players;
+        self.players = data.players;
+        console.log(self.players);
       } catch (e) {
         console.log(e);
       }
@@ -45,9 +45,12 @@ export default {
     this.join();
 
     this.socket = this.$root.socket;
-    this.socket.on('updatePlayers', (players) => {
+    /* this.socket.on('updatePlayers', (players) => {
+      console.log('from game socket');
+      console.log(this.players);
       this.players = players;
-    });
+      console.log(this.players);
+    }); */
   },
 };
 </script>

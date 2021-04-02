@@ -49,8 +49,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Setup session
 const session = expressSession({
-  name: 'session',
-  secret: 'Super secret! Shh! Do not tell anyone...',
+  name: 'myCookie',
+  secret: 'I am secret', // Must be a random string!
   resave: true,
   saveUninitialized: true,
 });
@@ -77,34 +77,15 @@ model.init({ io });
 
 // Handle connected socket.io sockets
 io.on('connection', (socket) => {
-  /* console.log(socket.handshake.session.cookie);
-  console.log(socket.handshake.sessionID);
-  if (socket.handshake.session.cookie.socketID === undefined) {
-    console.log('indeed');
-    socket.handshake.session.cookie.socketID = socket.handshake.sessionID;
-  }
-  console.log(socket.handshake.session.cookie); */
+  //console.log('unique socketid', socket.id);
+  //console.log('express-sessionID from socket', socket.handshake.sessionID);
+  // console.log('entire socket handshake', socket.handshake);
 
-  // This function serves to bind socket.io connections to user models
-
-  /* if (socket.handshake.session.userID
-    && model.findUser(socket.handshake.session.userID) !== undefined
-  ) {
-    // If the current user already logged in and then reloaded the page
-    model.updateUserSocket(socket.handshake.session.userID, socket);
-  } else {
-    socket.handshake.session.socketID = model.addUnregisteredSocket(socket);
-    socket.handshake.session.save((err) => {
-      if (err) console.error(err);
-      else console.debug(`Saved socketID: ${socket.handshake.session.socketID}`);
-    });
-  } */
-
-  socket.handshake.session.socketID = socket.handshake.sessionID;
+  /*socket.handshake.session.socketID = socket.handshake.sessionID;
   socket.handshake.session.save((err) => {
     if (err) console.error(err);
     else console.debug(`Saved socketID: ${socket.handshake.session.socketID}`);
-  });
+  }); */
 
   socket.on('disconnect', () => console.log('disconnected'));
 });
