@@ -4,7 +4,7 @@ const databasePath = path.join(__dirname, '..', 'db.sqlite');
 const db = require('better-sqlite3')('x.db', { databasePath });
 
 db.prepare('DROP TABLE IF EXISTS games').run();
-db.prepare('CREATE TABLE games (id INTEGER UNIQUE, sock1 TEXT UNIQUE, sock2 TEXT UNIQUE, FEN TEXT, moves TEXT, turn INTEGER)').run();
+db.prepare('CREATE TABLE games (id INTEGER UNIQUE, sock1 TEXT, sock2 TEXT, FEN TEXT, moves TEXT, turn INTEGER)').run();
 
 exports.insertNewChessGame = () => {
   const gameID = Math.random();

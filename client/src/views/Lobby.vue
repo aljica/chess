@@ -23,6 +23,7 @@ export default {
     return {
       games: [],
       random: 2,
+      socket: null,
     };
   },
   methods: {
@@ -49,9 +50,6 @@ export default {
     this.socket.on('updateRandom', (r) => {
       this.random = r;
     }); */
-    this.$socket.on('updateRandom', (r) => {
-      this.random = r;
-    });
 
     this.getGames();
   },
