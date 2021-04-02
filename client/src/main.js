@@ -1,16 +1,19 @@
 import Vue from 'vue';
 import io from 'socket.io-client';
-import VueSocketIO from 'vue-socket.io';
+import VueSocketIOExt from 'vue-socket.io-extended';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 
-Vue.use(
+/* Vue.use(
   new VueSocketIO({
     debug: true,
     connection: io('http://localhost:8989', { transports: ['websocket'] }), // options object is Optional
   }),
-);
+); */
+
+const socket = io('http://localhost:8989', { transports: ['websocket'] });
+Vue.use(VueSocketIOExt, socket);
 
 Vue.config.productionTip = false;
 

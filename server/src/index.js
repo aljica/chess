@@ -81,11 +81,11 @@ io.on('connection', (socket) => {
   //console.log('express-sessionID from socket', socket.handshake.sessionID);
   // console.log('entire socket handshake', socket.handshake);
 
-  /*socket.handshake.session.socketID = socket.handshake.sessionID;
-  socket.handshake.session.save((err) => {
-    if (err) console.error(err);
-    else console.debug(`Saved socketID: ${socket.handshake.session.socketID}`);
-  }); */
+  //socket.on('updateRandom', 4);
+  /*socket.on('updateRandom', (data) => {
+    console.log(data);
+    io.emit('event', data);
+  });*/
 
   socket.on('disconnect', () => console.log('disconnected'));
 });

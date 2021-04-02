@@ -23,7 +23,6 @@ export default {
     return {
       games: [],
       random: 2,
-      socket: null,
     };
   },
   methods: {
@@ -46,12 +45,16 @@ export default {
     },
   },
   created() {
-    /* this.socket = this.$root.socket;
-    this.socket.on('updateRandom', (r) => {
+    this.getGames();
+    // this.socket = this.$root.socket;
+    /* this.socket.on('randUpdate', (r) => {
+      console.log('logging from updaterandom socket');
       this.random = r;
     }); */
-
-    this.getGames();
+    this.$socket.client.on('event', (data) => {
+      console.log(data);
+      this.random = data;
+    });
   },
 };
 </script>

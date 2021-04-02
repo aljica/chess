@@ -87,7 +87,7 @@ exports.findUser = (name) => users[name];
 exports.createGame = () => {
   const gameID = db.insertNewChessGame();
   // this.io.emit('updateGames', this.getGames());
-  // exports.io.emit('updateRandom', 4);
+  exports.io.emit('event', 4);
   return gameID;
 };
 
@@ -99,7 +99,6 @@ exports.createGame = () => {
 exports.addPlayerToGame = (gameID, socketID) => {
   const sockets = db.getSessionIDs(gameID);
   if (sockets.sock1 === null) {
-    console.log(socketID);
     db.addPlayerSocketToGame(gameID, socketID, 'sock1');
   } else if (sockets.sock2 === null) {
     db.addPlayerSocketToGame(gameID, socketID, 'sock2');
