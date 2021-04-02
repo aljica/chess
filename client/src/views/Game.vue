@@ -32,7 +32,7 @@ export default {
     async join() {
       const self = this;
       try {
-        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'include' }); // 'same-origin' on credentials? if so, why? 'include' doesn't send sessionID, why?
+        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'include' }); // 'same-origin' on credentials? if so, why?
         const data = await response.json();
         self.players = data.players;
         console.log(self.players);
