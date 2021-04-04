@@ -8,7 +8,7 @@
       <h1>Connected!</h1>
     </div>
     <div>include form here for number submission depending on whose turn it is</div>
-    <Board />
+    <Board/>
   </div>
 </template>
 
@@ -30,6 +30,9 @@ export default {
     };
   },
   methods: {
+    do(index) {
+      console.log(index);
+    },
     checkWaiting() {
       if (this.players[0] === null || this.players[1] === null) return true;
       return false;

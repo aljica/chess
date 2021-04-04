@@ -1,5 +1,5 @@
 <template>
-  <button class='btn'>I am a Square</button>
+  <button class='btn' @click="$emit('clicked')">Sq</button>
 </template>
 
 <script>
