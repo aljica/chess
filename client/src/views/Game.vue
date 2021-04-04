@@ -8,13 +8,18 @@
       <h1>Connected!</h1>
     </div>
     <div>include form here for number submission depending on whose turn it is</div>
+    <Board />
   </div>
 </template>
 
 <script>
+import Board from '../components/Board.vue';
+
 export default {
   name: 'Game',
-  components: {},
+  components: {
+    Board,
+  },
   data() {
     return {
       gameID: this.$route.params.gameID,

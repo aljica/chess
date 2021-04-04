@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>Lobby</h1>
+    <h2>{{ this.$store.state.count }}</h2>
     <div class="row">
         <div class="well" v-for="game in games" :key="game.id">
           <div class="row" style="text-align: center;">

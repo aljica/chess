@@ -7,6 +7,7 @@ Vue.use(Vuex);
 /* eslint-disable no-param-reassign */
 export default new Vuex.Store({
   state: {
+    count: 0,
     isAuthenticated: false,
     isAdminAuth: false,
   },

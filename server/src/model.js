@@ -1,6 +1,6 @@
-const User = require('./models/user.model');
-const Game = require('./models/game.model');
-const db = require('./database/db');
+const User = require("./models/user.model");
+const Game = require("./models/game.model");
+const db = require("./database/db");
 
 /**
  * unregisteredSockets is used as a temporary pool of sockets
@@ -13,10 +13,10 @@ let unregisteredSockets = {};
 exports.io = undefined;
 
 /**
-  * Initialize the model
-  * @param { { io: SocketIO.Server} } config - The configurations needed to initialize the model.
-  * @returns {void}
-  */
+ * Initialize the model
+ * @param { { io: SocketIO.Server} } config - The configurations needed to initialize the model.
+ * @returns {void}
+ */
 exports.init = ({ io }) => {
   exports.io = io;
 };
@@ -25,7 +25,7 @@ exports.init = ({ io }) => {
  * Add a socket.io socket to the pool of unregistered sockets
  * @param {SocketIO.Socket} socket - The socket.io socket to add to the pool.
  * @returns {Number} The ID of the socket in the pool of unregistered sockets.
-*/
+ */
 exports.addUnregisteredSocket = (socket) => {
   const socketID = nextUnregisteredSocketID;
   nextUnregisteredSocketID += 1;
@@ -40,7 +40,7 @@ const assignUnregisteredSocket = (socketID) => {
     .filter((sockID) => sockID !== socketID)
     .reduce(
       (res, sockID) => ({ ...res, [sockID]: unregisteredSockets[sockID] }),
-      {},
+      {}
     );
 
   return socket;
@@ -87,7 +87,7 @@ exports.findUser = (name) => users[name];
 exports.createGame = () => {
   const gameID = db.insertNewChessGame();
   // this.io.emit('updateGames', this.getGames());
-  exports.io.emit('event', 4);
+  exports.io.emit("event", 4);
   return gameID;
 };
 
@@ -96,12 +96,12 @@ exports.createGame = () => {
  * @param {Integer, String} - (gameID, socketID): ID of the game and unique ID of user's socket.
  * @returns {List/Boolean} sockets - A two-element list of socket IDs, or false if there are already two players in the game.
  */
-exports.addPlayerToGame = (gameID, socketID) => {
+exports.addPlayerToGame = (gameID, sessionID) => {
   const sockets = db.getSessionIDs(gameID);
   if (sockets.sock1 === null) {
-    db.addPlayerSocketToGame(gameID, socketID, 'sock1');
+    db.addPlayerSocketToGame(gameID, sessionID, "sock1");
   } else if (sockets.sock2 === null) {
-    db.addPlayerSocketToGame(gameID, socketID, 'sock2');
+    db.addPlayerSocketToGame(gameID, sessionID, "sock2");
   } else {
     return false;
   }
