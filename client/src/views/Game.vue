@@ -8,7 +8,7 @@
       <h1>Connected!</h1>
     </div>
     <div>include form here for number submission depending on whose turn it is</div>
-    <Board/>
+    <Board :id="gameID" />
   </div>
 </template>
 

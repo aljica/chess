@@ -1,6 +1,7 @@
 <template>
   <div>
     <Square v-for="index in 64" :key="index" @clicked="print()" />
+    <h2>{{id}}</h2>
   </div>
 </template>
 
@@ -9,6 +10,7 @@ import Square from './Square.vue';
 
 export default {
   name: 'Board',
+  props: ['id'],
   components: {
     Square,
   },
