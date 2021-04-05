@@ -122,6 +122,7 @@ exports.testPython = (FEN) => {
     FEN,
   ]);
   pythonProcess.stdout.on("data", (data) => {
-    console.log(data.toString());
+    data = data.toString();
+    console.log(data);
   });
 };
