@@ -1,6 +1,7 @@
 const User = require("./models/user.model");
 const Game = require("./models/game.model");
 const db = require("./database/db");
+const spawn = require("child_process").spawn;
 
 /**
  * unregisteredSockets is used as a temporary pool of sockets
@@ -114,3 +115,13 @@ exports.getGames = () => {
 };
 
 exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);
+
+exports.testPython = (FEN) => {
+  const pythonProcess = spawn("python", [
+    "/home/linker/Documents/programming/chess-logic/chess.py",
+    FEN,
+  ]);
+  pythonProcess.stdout.on("data", (data) => {
+    console.log(data.toString());
+  });
+};
