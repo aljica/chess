@@ -118,7 +118,7 @@ exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);
 
 exports.testPython = (FEN) => {
   const pythonProcess = spawn("python", [
-    "/home/linker/Documents/programming/chess-logic/chess.py",
+    "/home/linker/Documents/programming/chess-logic/chess-logic.py",
     FEN,
   ]);
   pythonProcess.stdout.on("data", (data) => {
