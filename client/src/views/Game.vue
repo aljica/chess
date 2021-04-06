@@ -25,6 +25,7 @@ export default {
       gameID: this.$route.params.gameID,
       waiting: true,
       players: [null, null],
+      fen: null,
       socket: null,
       turn: null,
     };
@@ -43,7 +44,9 @@ export default {
         const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'include' }); // 'same-origin' on credentials? if so, why?
         const data = await response.json();
         self.players = data.players;
+        self.fen = data.fen;
         console.log(self.players);
+        console.log(self.fen);
       } catch (e) {
         console.log(e);
       }
