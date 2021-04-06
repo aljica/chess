@@ -23,7 +23,9 @@ router.get("/joinGame/:gameID", (req, res) => {
   console.log(sessionID);
   model.addPlayerToGame(gameID, sessionID);
   const players = model.getPlayersInGame(gameID);
-  res.status(200).send(players);
+  const fen = model.getGameFEN(gameID);
+  const data = {'players': players, 'fen': fen};
+  res.status(200).send(data);
 });
 
 module.exports = { router };

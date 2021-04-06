@@ -110,6 +110,8 @@ exports.addPlayerToGame = (gameID, sessionID) => {
   return sockets;
 };
 
+exports.getGameFEN = (gameID) => db.getFEN(gameID);
+
 exports.getGames = () => {
   return db.getAllGames();
 };
