@@ -43,10 +43,11 @@ export default {
       try {
         const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'include' }); // 'same-origin' on credentials? if so, why?
         const data = await response.json();
-        self.players = data.players;
+        self.players[0] = data.players.sock1;
+        self.players[1] = data.players.sock2;
         self.fen = data.fen;
         console.log(self.players);
-        console.log(self.fen);
+        console.log(self.fen.FEN);
       } catch (e) {
         console.log(e);
       }
