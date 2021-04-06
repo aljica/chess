@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       games: [],
-      random: 2,
+      random: this.$store.state.count,
     };
   },
   methods: {
@@ -54,7 +54,8 @@ export default {
     }); */
     this.$socket.client.on('event', (data) => {
       console.log(data);
-      this.random = data;
+      this.$store.commit('setCount', data);
+      this.random = this.$store.state.count;
     });
   },
 };

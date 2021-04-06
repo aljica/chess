@@ -88,7 +88,7 @@ exports.findUser = (name) => users[name];
 exports.createGame = () => {
   const gameID = db.insertNewChessGame();
   // this.io.emit('updateGames', this.getGames());
-  // exports.io.emit("event", 4);
+  exports.io.emit("event", 4);
   return gameID;
 };
 

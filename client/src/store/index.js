@@ -12,11 +12,14 @@ export default new Vuex.Store({
     isAdminAuth: false,
   },
   mutations: {
-    setIsAuthenticated(store, isAuthenticated) {
-      store.isAuthenticated = isAuthenticated;
+    setIsAuthenticated(state, isAuthenticated) {
+      state.isAuthenticated = isAuthenticated;
     },
-    setAdminAuth(store, isAdminAuth) {
-      store.isAdminAuth = isAdminAuth;
+    setAdminAuth(state, isAdminAuth) {
+      state.isAdminAuth = isAdminAuth;
+    },
+    setCount(state, data) {
+      state.count = data;
     },
   },
   getters: {
