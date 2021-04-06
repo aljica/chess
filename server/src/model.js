@@ -88,8 +88,10 @@ exports.findUser = (name) => users[name];
 exports.createGame = () => {
   const gameID = db.insertNewChessGame();
   // this.io.emit('updateGames', this.getGames());
-  exports.io.emit("event", 4);
-  return gameID;
+  // exports.io.emit("event", 4);
+  const fen = db.getFEN(gameID).FEN;
+  const data = {'gameID': gameID, 'fen': fen};
+  return data;
 };
 
 /**

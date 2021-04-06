@@ -23,3 +23,5 @@ exports.getSessionIDs = (gameID) => db.prepare('SELECT sock1, sock2 FROM games W
 exports.addPlayerSocketToGame = (gameID, socketID, sockX) => db.prepare(`UPDATE games SET ${sockX} = ? WHERE id=?`).run(socketID, gameID);
 
 exports.getAllGames = () => db.prepare('SELECT id FROM games').all();
+
+exports.getFEN = (gameID) => db.prepare('SELECT FEN FROM games WHERE id=?').get(gameID);
