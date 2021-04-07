@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Square v-for="index in 64" :key="index" @clicked="print()" />
+    <Square v-for="index in 64" :key="index" :idx="index" @clicked="print(index)" />
     <h2>{{id}}</h2>
   </div>
 </template>
@@ -15,11 +15,8 @@ export default {
     Square,
   },
   methods: {
-    do(index) {
-      console.log(index);
-    },
-    print() {
-      console.log('clicked');
+    print(idx) {
+      console.log(idx);
     },
   },
 };
