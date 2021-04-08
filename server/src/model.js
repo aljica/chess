@@ -88,7 +88,7 @@ exports.findUser = (name) => users[name];
 exports.createGame = () => {
   const gameID = db.insertNewChessGame();
   // this.io.emit('updateGames', this.getGames());
-  exports.io.emit("event", 4);
+  // exports.io.emit("event", 4);
   return gameID;
 };
 
@@ -118,13 +118,32 @@ exports.getGames = () => {
 
 exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);
 
-exports.testPython = (FEN) => {
+exports.chessLogic = (FEN, getMoves = 'yes', move = '') => {
   const pythonProcess = spawn("python", [
     "/home/linker/Documents/programming/chess-logic/chess-logic.py",
-    FEN,
+    FEN, getMoves, move
   ]);
   pythonProcess.stdout.on("data", (data) => {
-    data = data.toString();
-    console.log(data);
+    if (getMoves === 'yes') {
+      data = data.toString()
+      let parsedData = `${data}`;
+      for (let i = 0; i < data.length; i++) {
+        char = data.charAt(i);
+        if (char === '\'') {
+          parsedData = parsedData.replace('\'', '\"');
+        }
+      }
+      console.log(JSON.parse(parsedData));
+      return JSON.parse(parsedData); // Returns data as array
+    } else if (getMoves === 'no') {
+      const FEN = data.toString();
+      if (FEN === 'failed') {
+        return 'moveFailed';
+      } else {
+        return FEN;
+      }
+    } else {
+      return 'Incorrect getMoves parameter (yes/no)';
+    }
   });
 };
