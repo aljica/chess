@@ -119,7 +119,7 @@ exports.getGames = () => {
 exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);
 
 function parseData(data) {
-  let parsedData = '';
+  let parsedData = `${data}`;
   for (let i = 0; i < data.length; i++) {
     char = data.charAt(i);
     if (char === '\'') {
@@ -140,7 +140,7 @@ exports.chessLogic = (FEN, getMoves = 'yes', move = '') => {
     pythonProcess.stdout.on("data", (data) => {
       if (getMoves === 'yes') {
         data = data.toString()
-        const parsedData = this.parseData(data); // Returns data as array
+        const parsedData = parseData(data); // Returns data as array
         resolve(parsedData);
       } else if (getMoves === 'no') {
         const FEN = data.toString();
