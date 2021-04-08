@@ -123,27 +123,34 @@ exports.chessLogic = (FEN, getMoves = 'yes', move = '') => {
     "/home/linker/Documents/programming/chess-logic/chess-logic.py",
     FEN, getMoves, move
   ]);
-  pythonProcess.stdout.on("data", (data) => {
-    if (getMoves === 'yes') {
-      data = data.toString()
-      let parsedData = `${data}`;
-      for (let i = 0; i < data.length; i++) {
-        char = data.charAt(i);
-        if (char === '\'') {
-          parsedData = parsedData.replace('\'', '\"');
+  let res = null;
+  
+  return new Promise((resolve, reject) => {
+    pythonProcess.stdout.on("data", (data) => {
+      if (getMoves === 'yes') {
+        data = data.toString()
+        let parsedData = `${data}`;
+        for (let i = 0; i < data.length; i++) {
+          char = data.charAt(i);
+          if (char === '\'') {
+            parsedData = parsedData.replace('\'', '\"');
+          }
         }
-      }
-      console.log(JSON.parse(parsedData));
-      return JSON.parse(parsedData); // Returns data as array
-    } else if (getMoves === 'no') {
-      const FEN = data.toString();
-      if (FEN === 'failed') {
-        return 'moveFailed';
+        res = JSON.parse(parsedData); // Returns data as array
+        resolve(res);
+      } else if (getMoves === 'no') {
+        const FEN = data.toString();
+        if (FEN === 'failed') {
+          res = 'moveFailed';
+          reject(res);
+        } else {
+          res = FEN;
+          resolve(res);
+        }
       } else {
-        return FEN;
+        res = 'Incorrect getMoves parameter (yes/no)';
+        reject(res);
       }
-    } else {
-      return 'Incorrect getMoves parameter (yes/no)';
-    }
+    });
   });
 };
