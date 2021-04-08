@@ -1,7 +1,6 @@
 <template>
   <div>
-    <button class='btn' @click="onClickSquare()">Sq</button>
-    <h2>{{idx}}</h2>
+    <button class='box' @click="onClickSquare()">Sq</button>
   </div>
 </template>
 
@@ -16,3 +15,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.box {
+  background-color: #444;
+  color: #fff;
+  border-radius: 1px;
+  padding: 10px;
+  font-size: 100%;
+}
+</style>

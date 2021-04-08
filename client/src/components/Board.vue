@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div class='wrapper'>
     <Square v-for="index in 64" :key="index" :idx="index" @clicked="print(index)" />
-    <h2>{{id}}</h2>
   </div>
 </template>
 
@@ -21,3 +20,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.wrapper {
+  display: grid;
+  grid-template-columns: 25px 25px 25px;
+  grid-gap: 10px;
+  background-color: #fff;
+  color: #444;
+}
+</style>
