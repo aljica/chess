@@ -118,6 +118,17 @@ exports.getGames = () => {
 
 exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);
 
+function parseData(data) {
+  let parsedData = '';
+  for (let i = 0; i < data.length; i++) {
+    char = data.charAt(i);
+    if (char === '\'') {
+      parsedData = parsedData.replace('\'', '\"');
+    }
+  }
+  return JSON.parse(parsedData);
+};
+
 exports.chessLogic = (FEN, getMoves = 'yes', move = '') => {
   const pythonProcess = spawn("python", [
     "/home/linker/Documents/programming/chess-logic/chess-logic.py",
@@ -129,15 +140,8 @@ exports.chessLogic = (FEN, getMoves = 'yes', move = '') => {
     pythonProcess.stdout.on("data", (data) => {
       if (getMoves === 'yes') {
         data = data.toString()
-        let parsedData = `${data}`;
-        for (let i = 0; i < data.length; i++) {
-          char = data.charAt(i);
-          if (char === '\'') {
-            parsedData = parsedData.replace('\'', '\"');
-          }
-        }
-        res = JSON.parse(parsedData); // Returns data as array
-        resolve(res);
+        const parsedData = this.parseData(data); // Returns data as array
+        resolve(parsedData);
       } else if (getMoves === 'no') {
         const FEN = data.toString();
         if (FEN === 'failed') {
