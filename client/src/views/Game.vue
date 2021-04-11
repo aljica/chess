@@ -1,57 +1,66 @@
 <template>
   <div class="text-box col-md-4 col-md-offset-4" style="text-align: center">
     <h1>Number Guess Game</h1>
-    <div>
-      <h1 v-if="checkWaiting()">Waiting for player</h1>
-      <h1 v-else>Connected!</h1>
+    <div v-if="checkWaiting()">
+      <h1>Waiting for player</h1>
+    </div>
+    <div v-else>
+      <h1>Connected!</h1>
     </div>
     <div>include form here for number submission depending on whose turn it is</div>
+    <Board :id="gameID" :fen="fen" />
   </div>
 </template>
 
 <script>
+import Board from '../components/Board.vue';
+
 export default {
   name: 'Game',
-  components: {},
+  components: {
+    Board,
+  },
   data() {
     return {
       gameID: this.$route.params.gameID,
       waiting: true,
-      connections: [null, null],
+      players: [null, null],
+      fen: null,
       socket: null,
+      turn: null,
     };
   },
   methods: {
+    do(index) {
+      console.log(index);
+    },
     checkWaiting() {
-      if (this.connections[0] === null || this.connections[1] === null) return true;
+      if (this.players[0] === null || this.players[1] === null) return true;
       return false;
     },
-    get() {
-      fetch('/api/getSession')
-        .then((res) => res.json())
-        .then((data) => {
-          console.log('socketID');
-          console.log(data);
-          if (this.user1 === null) {
-            console.log('user1');
-            this.user1 = data.socketID;
-            console.log(this.user1);
-          } else if (this.user2 === null) {
-            console.log('user2');
-            this.user2 = data.socketID;
-            console.log(this.user2);
-          }
-        })
-        .catch(console.error);
+    async join() {
+      const self = this;
+      try {
+        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'include' }); // 'same-origin' on credentials? if so, why?
+        const data = await response.json();
+        self.players[0] = data.players.sock1;
+        self.players[1] = data.players.sock2;
+        self.fen = data.fen.FEN;
+        console.log(self.fen);
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   created() {
-    // this.get();
+    this.join();
 
-    this.socket = this.$root.socket;
-    console.log(this.socket);
-    /* this.socket.on('connection', () => {
-      this.get();
+    // this.socket = this.$root.socket;
+    /* this.socket.on('updatePlayers', (players) => {
+      console.log('from game socket');
+      console.log(this.players);
+      this.players = players;
+      console.log(this.players);
     }); */
   },
 };
