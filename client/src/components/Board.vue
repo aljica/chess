@@ -1,6 +1,12 @@
 <template>
-  <div class='wrapper'>
-    <Square v-for="index in 64" :key="index" :idx="index" @clicked="print(index)" />
+  <div>
+    <b-container>
+      <b-row align-v="end" v-for="i in 8" :key="i">
+        <b-col offset="*" sm="*" v-for="j in 8" :key="j">
+          <Square :i="i" :j="j" @clicked="print(i, j)" />
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -9,24 +15,21 @@ import Square from './Square.vue';
 
 export default {
   name: 'Board',
-  props: ['id'],
+  props: ['fen'],
   components: {
     Square,
   },
   methods: {
-    print(idx) {
-      console.log(idx);
+    clicked() {
+      console.log('Button clicked!');
+    },
+    print(i, j) {
+      console.log('coordinates', i, j);
     },
   },
 };
 </script>
 
 <style>
-.wrapper {
-  display: grid;
-  grid-template-columns: 25px 25px 25px;
-  grid-gap: 10px;
-  background-color: #fff;
-  color: #444;
-}
+
 </style>
