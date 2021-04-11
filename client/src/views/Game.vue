@@ -8,7 +8,7 @@
       <h1>Connected!</h1>
     </div>
     <div>include form here for number submission depending on whose turn it is</div>
-    <Board :id="gameID" />
+    <Board :id="gameID" :fen="fen" />
   </div>
 </template>
 
@@ -45,9 +45,8 @@ export default {
         const data = await response.json();
         self.players[0] = data.players.sock1;
         self.players[1] = data.players.sock2;
-        self.fen = data.fen;
-        console.log(self.players);
-        console.log(self.fen.FEN);
+        self.fen = data.fen.FEN;
+        console.log(self.fen);
       } catch (e) {
         console.log(e);
       }
