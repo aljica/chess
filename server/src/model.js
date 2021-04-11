@@ -102,6 +102,9 @@ exports.addPlayerToGame = (gameID, sessionID) => {
   if (sockets.sock1 === null) {
     db.addPlayerSocketToGame(gameID, sessionID, "sock1");
   } else if (sockets.sock2 === null) {
+    if (sessionID === sockets.sock1) {
+      return false;
+    }
     db.addPlayerSocketToGame(gameID, sessionID, "sock2");
   } else {
     return false;
