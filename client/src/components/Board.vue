@@ -27,6 +27,9 @@ export default {
       console.log('coordinates', i, j);
     },
   },
+  created() {
+    console.log(this.fen);
+  },
 };
 </script>
 
