@@ -28,7 +28,7 @@ export default {
     },
   },
   created() {
-    console.log(this.fen);
+    console.log('fen', this.fen);
   },
 };
 </script>

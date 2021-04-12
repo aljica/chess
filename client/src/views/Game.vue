@@ -8,7 +8,12 @@
       <h1>Connected!</h1>
     </div>
     <div>include form here for number submission depending on whose turn it is</div>
-    <Board :id="gameID" :fen="fen" />
+    <div v-if="this.fetchingFEN === true">
+      Wait for Board
+    </div>
+    <div v-else>
+      <Board :id="gameID" :fen="fen" />
+    </div>
   </div>
 </template>
 
@@ -26,6 +31,7 @@ export default {
       waiting: true,
       players: [null, null],
       fen: null,
+      fetchingFEN: true,
       socket: null,
       turn: null,
     };
@@ -46,7 +52,7 @@ export default {
         self.players[0] = data.players.sock1;
         self.players[1] = data.players.sock2;
         self.fen = data.fen.FEN;
-        console.log(self.fen);
+        self.fetchingFEN = false;
       } catch (e) {
         console.log(e);
       }
