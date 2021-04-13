@@ -14,6 +14,7 @@
     <div v-else>
       <Board :id="gameID" :fen="fen" />
     </div>
+    <button @click="setfen()">x</button>
   </div>
 </template>
 
@@ -37,8 +38,8 @@ export default {
     };
   },
   methods: {
-    do(index) {
-      console.log(index);
+    setfen() {
+      this.fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
     },
     checkWaiting() {
       if (this.players[0] === null || this.players[1] === null) return true;
