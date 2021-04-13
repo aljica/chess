@@ -43,12 +43,12 @@ export default {
             dict[pieceCoordinate] = c;
             colNumber += 1;
           } else if (/\d/.test(c)) {
-            dict[pieceCoordinate] = '';
+            dict[pieceCoordinate] = 'e';
             const cAsNum = Number(c);
             for (let i = 1; i < cAsNum; i += 1) {
               colNumber += 1;
               pieceCoordinate = `${alphabetiCoordinate}${colNumber}`;
-              dict[pieceCoordinate] = '';
+              dict[pieceCoordinate] = 'e';
             }
             colNumber += 1;
           }
