@@ -1,8 +1,8 @@
 <template>
   <div>
-    <b-container>
+    <b-container fluid="xl">
       <b-row align-v="end" v-for="i in 8" :key="i">
-        <b-col offset="*" sm="*" v-for="j in 8" :key="j">
+        <b-col offset="*" lg="*" v-for="j in 8" :key="j">
           <Square :i="i" :j="j" :piece="boardAsDict[numToAlphabet[i]+''+j]" @clicked="print(i, j)"/>
         </b-col>
       </b-row>
@@ -43,12 +43,12 @@ export default {
             dict[pieceCoordinate] = c;
             colNumber += 1;
           } else if (/\d/.test(c)) {
-            dict[pieceCoordinate] = 'e';
+            dict[pieceCoordinate] = '';
             const cAsNum = Number(c);
             for (let i = 1; i < cAsNum; i += 1) {
               colNumber += 1;
               pieceCoordinate = `${alphabetiCoordinate}${colNumber}`;
-              dict[pieceCoordinate] = 'e';
+              dict[pieceCoordinate] = '';
             }
             colNumber += 1;
           }
