@@ -123,6 +123,9 @@ exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);
 
 function parseData(data) {
   let parsedData = `${data}`;
+  // Replace all instances of single-quotes to double-quotes
+  // Necessary for JSON.parse() to work, which parses
+  // a string (which is parameter data's data type) to an object
   for (let i = 0; i < data.length; i++) {
     const char = data.charAt(i);
     if (char === '\'') {
