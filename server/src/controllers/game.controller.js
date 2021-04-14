@@ -28,9 +28,7 @@ router.get('/joinGame/:gameID', (req, res) => {
     const { sessionID } = req;
     console.log(sessionID);
     model.addPlayerToGame(gameID, sessionID);
-    const players = model.getPlayersInGame(gameID);
-    const fen = model.getGameFEN(gameID);
-    const data = { players: players, fen: fen };
+    const data = { players: model.getPlayersInGame(gameID), fen: model.getGameFEN(gameID) };
     res.status(200).send(data);
   } catch (e) {
     res.status(500).send('failed for some reason');
