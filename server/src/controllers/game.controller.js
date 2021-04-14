@@ -4,9 +4,13 @@ const model = require('../model.js');
 const router = express.Router();
 
 router.get('/gameList', (req, res) => {
-  const games = model.getGames();
-  console.log(req.sessionID);
-  res.status(200).json({ list: games });
+  try {
+    const games = model.getGames();
+    console.log(req.sessionID);
+    res.status(200).json({ list: games });
+  } catch (e) {
+    res.status(500).send({ error: e });
+  }
 });
 
 router.get('/createGame', (req, res) => {
@@ -19,14 +23,18 @@ router.get('/createGame', (req, res) => {
 });
 
 router.get('/joinGame/:gameID', (req, res) => {
-  const { gameID } = req.params;
-  const { sessionID } = req;
-  console.log(sessionID);
-  model.addPlayerToGame(gameID, sessionID);
-  const players = model.getPlayersInGame(gameID);
-  const fen = model.getGameFEN(gameID);
-  const data = {'players': players, 'fen': fen};
-  res.status(200).send(data);
+  try {
+    const { gameID } = req.params;
+    const { sessionID } = req;
+    console.log(sessionID);
+    model.addPlayerToGame(gameID, sessionID);
+    const players = model.getPlayersInGame(gameID);
+    const fen = model.getGameFEN(gameID);
+    const data = { players: players, fen: fen };
+    res.status(200).send(data);
+  } catch (e) {
+    res.status(500).send('failed for some reason');
+  }
 });
 
 module.exports = { router };
