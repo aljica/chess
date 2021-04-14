@@ -18,8 +18,12 @@ router.get('/createGame', (req, res) => {
   // Should have a database table that keeps track of sessionID 
   // and timestamp of latest game creation.
   // This should be a post request: play as white/black, time controls etc.
-  const gameID = model.createGame();
-  res.status(200).send({ gameID });
+  try {
+    const gameID = model.createGame();
+    res.status(200).send({ gameID });
+  } catch (e) {
+    res.sendStatus(500);
+  }
 });
 
 router.get('/joinGame/:gameID', (req, res) => {
@@ -28,10 +32,12 @@ router.get('/joinGame/:gameID', (req, res) => {
     const { sessionID } = req;
     console.log(sessionID);
     model.addPlayerToGame(gameID, sessionID);
-    const data = { players: model.getPlayersInGame(gameID), fen: model.getGameFEN(gameID) };
+    const players = model.getPlayersInGame(gameID);
+    const fen = model.getGameFEN(gameID);
+    const data = { players: players, fen: fen };
     res.status(200).send(data);
   } catch (e) {
-    res.status(500).send('failed for some reason');
+    res.sendStatus(500);
   }
 });
 
