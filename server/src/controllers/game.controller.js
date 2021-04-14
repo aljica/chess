@@ -13,6 +13,7 @@ router.get('/gameList', (req, res) => {
   }
 });
 
+// Post request?
 router.get('/createGame', (req, res) => {
   // Check if user already created a game in the last X seconds.
   // Should have a database table that keeps track of sessionID 
@@ -26,6 +27,7 @@ router.get('/createGame', (req, res) => {
   }
 });
 
+// Should probably be a post request
 router.get('/joinGame/:gameID', (req, res) => {
   try {
     const { gameID } = req.params;
