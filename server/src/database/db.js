@@ -9,12 +9,12 @@ db.prepare('CREATE TABLE games (id INTEGER UNIQUE, sock1 TEXT, sock2 TEXT, FEN T
 
 exports.insertNewChessGame = () => {
   const gameID = Math.random();
-  const startingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'; // Starting chess position
+  const startingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'; // Starting chess position
   try {
     db.prepare('INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)').run(gameID, null, null, startingFEN, '', 0);
     return gameID;
   } catch (e) {
-    return false;
+    throw new Error(e);
   }
 };
 
