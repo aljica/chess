@@ -124,7 +124,7 @@ exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);
 function parseData(data) {
   let parsedData = `${data}`;
   for (let i = 0; i < data.length; i++) {
-    char = data.charAt(i);
+    const char = data.charAt(i);
     if (char === '\'') {
       parsedData = parsedData.replace('\'', '\"');
     }
@@ -132,31 +132,22 @@ function parseData(data) {
   return JSON.parse(parsedData);
 };
 
-exports.chessLogic = (FEN, getMoves = 'yes', move = '') => {
-  const pythonProcess = spawn("python", [
-    "/home/linker/Documents/programming/chess-logic/chess-logic.py",
-    FEN, getMoves, move
+exports.chessLogic = (FEN, move = '') => {
+  /* If move === '', this function only returns legal moves
+  If move === 'g6g7', i.e. a legit move, return dict of FEN & legalmoves.
+  Otherwise, just raise an error.
+  */
+  const pythonProcess = spawn('python', [
+    '/home/linker/Documents/programming/chess-logic/chess-logic.py',
+    FEN, move,
   ]);
-  let res = null;
-  
+
   return new Promise((resolve, reject) => {
-    pythonProcess.stdout.on("data", (data) => {
-      if (getMoves === 'yes') {
-        data = data.toString()
-        const parsedData = parseData(data); // Returns data as array
-        resolve(parsedData);
-      } else if (getMoves === 'no') {
-        const FEN = data.toString();
-        if (FEN === 'failed') {
-          res = 'moveFailed';
-          reject(res);
-        } else {
-          res = FEN;
-          resolve(res);
-        }
-      } else {
-        res = 'Incorrect getMoves parameter (yes/no)';
-        reject(res);
+    pythonProcess.stdout.on('data', (data) => {
+      try {
+        resolve(parseData(data.toString()));
+      } catch (e) {
+        reject(new Error('failed to parse data'));
       }
     });
   });
