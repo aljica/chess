@@ -35,12 +35,12 @@ exports.createGame = () => {
 exports.addPlayerToGame = (gameID, sessionID) => {
   const sockets = db.getSessionIDs(gameID);
   if (sockets.sock1 === null) {
-    db.addPlayerSocketToGame(gameID, sessionID, "sock1");
+    db.addPlayerSocketToGame(gameID, sessionID, 'sock1');
   } else if (sockets.sock2 === null) {
     if (sessionID === sockets.sock1) {
       return false;
     }
-    db.addPlayerSocketToGame(gameID, sessionID, "sock2");
+    db.addPlayerSocketToGame(gameID, sessionID, 'sock2');
   } else {
     return false;
   }
@@ -59,10 +59,10 @@ function parseData(data) {
   // Replace all instances of single-quotes to double-quotes
   // Necessary for JSON.parse() to work, which parses
   // a string (which is parameter data's data type) to an object
-  for (let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i += 1) {
     const char = data.charAt(i);
     if (char === '\'') {
-      parsedData = parsedData.replace('\'', '\"');
+      parsedData = parsedData.replace('\'', '"');
     }
   }
   return JSON.parse(parsedData);
