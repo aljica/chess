@@ -116,7 +116,6 @@ exports.addPlayerToGame = (gameID, sessionID) => {
 exports.getGameFEN = (gameID) => db.getFEN(gameID);
 
 exports.getGames = () => db.getAllGames();
-};
 
 exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);
 
