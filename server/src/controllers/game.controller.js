@@ -45,8 +45,7 @@ router.put('/move/:gameID', async (req, res) => {
     const { gameID } = req.params;
     const { move } = req.body;
     const data = await model.makeMove(gameID, move);
-
-    console.log('init');
+    res.status(200).send(data);
   } catch (e) {
     res.sendStatus(500);
   }
