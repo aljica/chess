@@ -104,7 +104,10 @@ exports.joinGame = async (gameID, sessionID) => {
 
 exports.makeMove = async (gameID, move) => {
   try {
-    console.log('init');
+    const fen = this.getGameFEN(gameID).FEN; // Get game's FEN
+    const data = await this.chessLogic(fen, move); // Make the move
+    // this.updateGameFEN(gameID, data.fen); // Update game's FEN in DB
+    return data; // Object containing fen & legalMoves
   } catch (e) {
     throw new Error(e);
   }

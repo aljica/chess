@@ -39,7 +39,7 @@ router.get('/joinGame/:gameID', async (req, res) => {
   }
 });
 
-router.post('/move/:gameID', async (req, res) => {
+router.put('/move/:gameID', async (req, res) => {
   try {
     console.log('init');
   } catch (e) {
