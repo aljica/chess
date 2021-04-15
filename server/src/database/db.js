@@ -11,7 +11,7 @@ exports.insertNewChessGame = () => {
   const gameID = Math.random();
   const startingFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'; // Starting chess position
   try {
-    db.prepare('INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)').run(gameID, null, null, startingFEN, '', 0);
+    db.prepare('INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)').run(gameID, '', '', startingFEN, '', 0);
     return gameID;
   } catch (e) {
     throw new Error(e);
