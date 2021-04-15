@@ -34,19 +34,13 @@ exports.createGame = () => {
  */
 exports.addPlayerToGame = (gameID, sessionID) => {
   const sockets = this.getPlayersInGame(gameID);
-  if (sockets === undefined) {
-    return false;
-  }
+  if (sockets === undefined) return false;
   if (sockets.sock1 === null) {
     db.addPlayerSocketToGame(gameID, sessionID, 'sock1');
   } else if (sockets.sock2 === null) {
-    if (sessionID === sockets.sock1) {
-      return false;
-    }
+    if (sessionID === sockets.sock1) return false;
     db.addPlayerSocketToGame(gameID, sessionID, 'sock2');
-  } else {
-    return false;
-  }
+  } else return false;
   // this.io.emit('updatePlayers', sockets);
   return sockets;
 };
@@ -64,9 +58,7 @@ function parseData(data) {
   // a string (which is parameter data's data type) to an object
   for (let i = 0; i < data.length; i += 1) {
     const char = data.charAt(i);
-    if (char === '\'') {
-      parsedData = parsedData.replace('\'', '"');
-    }
+    if (char === '\'') parsedData = parsedData.replace('\'', '"');
   }
   return JSON.parse(parsedData);
 }
@@ -95,9 +87,7 @@ exports.chessLogic = (FEN, move = '') => {
 exports.joinGame = async (gameID, sessionID) => {
   try {
     const addPlayerSucceeded = this.addPlayerToGame(gameID, sessionID);
-    if (addPlayerSucceeded === false) {
-      return false;
-    }
+    if (addPlayerSucceeded === false) return false;
     const players = this.getPlayersInGame(gameID);
     const fen = this.getGameFEN(gameID).FEN;
     const legalMoves = await this.chessLogic(fen, '');
@@ -113,9 +103,7 @@ exports.updateGameFEN = (gameID, fen) => db.updateFEN(gameID, fen);
 exports.makeMove = async (gameID, move) => {
   try {
     const fen = this.getGameFEN(gameID); // Get game's FEN
-    if (fen === undefined) {
-      return false;
-    }
+    if (fen === undefined) return false;
     this.fen = fen.FEN;
     const data = await this.chessLogic(fen, move); // Make the move
     // this.updateGameFEN(gameID, data.fen); // Update game's FEN in DB
