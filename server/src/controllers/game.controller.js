@@ -27,7 +27,7 @@ router.get('/createGame', (req, res) => {
   }
 });
 
-// Should probably be a post request
+// Should probably be a PUT request, because players are updated (although not always?)
 router.get('/joinGame/:gameID', async (req, res) => {
   try {
     const { gameID } = req.params;

@@ -102,6 +102,8 @@ exports.joinGame = async (gameID, sessionID) => {
   }
 };
 
+exports.updateGameFEN = (gameID, fen) => db.updateFEN(gameID, fen);
+
 exports.makeMove = async (gameID, move) => {
   try {
     const fen = this.getGameFEN(gameID).FEN; // Get game's FEN
