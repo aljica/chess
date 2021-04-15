@@ -100,11 +100,29 @@ exports.joinGame = async (gameID, sessionID) => {
 
 exports.updateGameFEN = (gameID, fen) => db.updateFEN(gameID, fen);
 
-exports.makeMove = async (gameID, move) => {
+// This function serves to ensure whoever is trying to
+// make the move is actually one of the two chess players
+// and that it is their turn.
+exports.correctMoveMaker = (gameID, fen, sessionID) => {
+  const players = this.getPlayersInGame(gameID);
+  // Extract which player's turn it is from fen:
+  const fenAsList = fen.split('/');
+  const gameInfo = fenAsList[fenAsList.length - 1].split(' ');
+  const toMove = gameInfo[1];
+  if (toMove === 'w') {
+    if (players.sock1 === sessionID) return true;
+  } else if (toMove === 'b') {
+    if (players.sock2 === sessionID) return true;
+  }
+  return false;
+};
+
+exports.makeMove = async (gameID, move, sessionID) => {
   try {
     let fen = this.getGameFEN(gameID); // Get game's FEN
     if (fen === undefined) return false;
     fen = fen.FEN;
+    if (!this.correctMoveMaker(gameID, fen, sessionID)) return false;
     const data = await this.chessLogic(fen, move); // Make the move
     // If move = '', data.fen access will fail and error will be thrown. Good!
     this.updateGameFEN(gameID, data.fen); // Update game's FEN in DB
