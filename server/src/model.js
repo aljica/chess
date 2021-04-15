@@ -35,9 +35,9 @@ exports.createGame = () => {
 exports.addPlayerToGame = (gameID, sessionID) => {
   const sockets = this.getPlayersInGame(gameID);
   if (sockets === undefined) return false;
-  if (sockets.sock1 === '') {
+  if (sockets.sock1 === null) {
     db.addPlayerSocketToGame(gameID, sessionID, 'sock1');
-  } else if (sockets.sock2 === '') {
+  } else if (sockets.sock2 === null) {
     if (!(sessionID === sockets.sock1)) db.addPlayerSocketToGame(gameID, sessionID, 'sock2');
   }
   // this.io.emit('updatePlayers', sockets);
