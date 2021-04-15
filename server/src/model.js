@@ -106,6 +106,7 @@ exports.makeMove = async (gameID, move) => {
     if (fen === undefined) return false;
     fen = fen.FEN;
     const data = await this.chessLogic(fen, move); // Make the move
+    // If move = '', data.fen access will fail and error will be thrown. Good!
     this.updateGameFEN(gameID, data.fen); // Update game's FEN in DB
     return data; // Object containing fen & legalMoves
   } catch (e) {

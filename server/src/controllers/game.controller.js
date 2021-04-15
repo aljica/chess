@@ -42,6 +42,10 @@ router.get('/joinGame/:gameID', async (req, res) => {
 
 router.put('/move/:gameID', async (req, res) => {
   try {
+    const { gameID } = req.params;
+    const { move } = req.body;
+    const data = await model.makeMove(gameID, move);
+
     console.log('init');
   } catch (e) {
     res.sendStatus(500);
