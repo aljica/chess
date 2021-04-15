@@ -28,15 +28,11 @@ router.get('/createGame', (req, res) => {
 });
 
 // Should probably be a post request
-router.get('/joinGame/:gameID', (req, res) => {
+router.get('/joinGame/:gameID', async (req, res) => {
   try {
     const { gameID } = req.params;
     const { sessionID } = req;
-    console.log(sessionID);
-    model.addPlayerToGame(gameID, sessionID);
-    const players = model.getPlayersInGame(gameID);
-    const fen = model.getGameFEN(gameID);
-    const data = { players: players, fen: fen };
+    const data = await model.joinGame(gameID, sessionID);
     res.status(200).send(data);
   } catch (e) {
     res.sendStatus(500);

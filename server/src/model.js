@@ -88,3 +88,16 @@ exports.chessLogic = (FEN, move = '') => {
     });
   });
 };
+
+exports.joinGame = async (gameID, sessionID) => {
+  try {
+    this.addPlayerToGame(gameID, sessionID);
+    const players = this.getPlayersInGame(gameID);
+    const fen = this.getGameFEN(gameID).FEN;
+    const legalMoves = await this.chessLogic(fen, ''); // await here?
+    const data = { players: players, fen: fen, legalMoves: legalMoves };
+    return data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
