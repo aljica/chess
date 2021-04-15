@@ -35,7 +35,7 @@ router.get('/joinGame/:gameID', async (req, res) => {
     const data = await model.joinGame(gameID, sessionID);
     res.status(200).send(data);
   } catch (e) {
-    res.sendStatus(500);
+    res.sendStatus(404);
   }
 });
 
