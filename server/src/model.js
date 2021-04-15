@@ -112,7 +112,11 @@ exports.updateGameFEN = (gameID, fen) => db.updateFEN(gameID, fen);
 
 exports.makeMove = async (gameID, move) => {
   try {
-    const fen = this.getGameFEN(gameID).FEN; // Get game's FEN
+    const fen = this.getGameFEN(gameID); // Get game's FEN
+    if (fen === undefined) {
+      return false;
+    }
+    this.fen = fen.FEN;
     const data = await this.chessLogic(fen, move); // Make the move
     // this.updateGameFEN(gameID, data.fen); // Update game's FEN in DB
     return data; // Object containing fen & legalMoves
