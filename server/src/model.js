@@ -33,7 +33,10 @@ exports.createGame = () => {
  * IDs, or false if there are already two players in the game.
  */
 exports.addPlayerToGame = (gameID, sessionID) => {
-  const sockets = db.getSessionIDs(gameID);
+  const sockets = this.getPlayersInGame(gameID);
+  if (sockets === undefined) {
+    return false;
+  }
   if (sockets.sock1 === null) {
     db.addPlayerSocketToGame(gameID, sessionID, 'sock1');
   } else if (sockets.sock2 === null) {
@@ -91,7 +94,10 @@ exports.chessLogic = (FEN, move = '') => {
 
 exports.joinGame = async (gameID, sessionID) => {
   try {
-    this.addPlayerToGame(gameID, sessionID);
+    const addPlayerSucceeded = this.addPlayerToGame(gameID, sessionID);
+    if (addPlayerSucceeded === false) {
+      return false;
+    }
     const players = this.getPlayersInGame(gameID);
     const fen = this.getGameFEN(gameID).FEN;
     const legalMoves = await this.chessLogic(fen, ''); // await here?
