@@ -100,7 +100,7 @@ exports.joinGame = async (gameID, sessionID) => {
     }
     const players = this.getPlayersInGame(gameID);
     const fen = this.getGameFEN(gameID).FEN;
-    const legalMoves = await this.chessLogic(fen, ''); // await here?
+    const legalMoves = await this.chessLogic(fen, '');
     const data = { players: players, fen: fen, legalMoves: legalMoves };
     return data;
   } catch (e) {
