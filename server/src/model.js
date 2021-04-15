@@ -101,3 +101,11 @@ exports.joinGame = async (gameID, sessionID) => {
     throw new Error(e);
   }
 };
+
+exports.makeMove = async (gameID, move) => {
+  try {
+    console.log('init');
+  } catch (e) {
+    throw new Error(e);
+  }
+};
