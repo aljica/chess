@@ -16,7 +16,7 @@ router.get('/gameList', (req, res) => {
 // Post request?
 router.get('/createGame', (req, res) => {
   // Check if user already created a game in the last X seconds.
-  // Should have a database table that keeps track of sessionID 
+  // Should have a database table that keeps track of sessionID
   // and timestamp of latest game creation.
   // This should be a post request: play as white/black, time controls etc.
   try {
