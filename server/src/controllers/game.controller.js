@@ -16,7 +16,7 @@ router.get('/gameList', (req, res) => {
 // Post request?
 router.get('/createGame', (req, res) => {
   // Check if user already created a game in the last X seconds.
-  // Should have a database table that keeps track of sessionID 
+  // Should have a database table that keeps track of sessionID
   // and timestamp of latest game creation.
   // This should be a post request: play as white/black, time controls etc.
   try {
@@ -27,17 +27,27 @@ router.get('/createGame', (req, res) => {
   }
 });
 
-// Should probably be a post request
-router.get('/joinGame/:gameID', (req, res) => {
+// Should probably be a PUT request, because players are updated (although not always?)
+router.get('/joinGame/:gameID', async (req, res) => {
   try {
     const { gameID } = req.params;
     const { sessionID } = req;
-    console.log(sessionID);
-    model.addPlayerToGame(gameID, sessionID);
-    const players = model.getPlayersInGame(gameID);
-    const fen = model.getGameFEN(gameID);
-    const data = { players: players, fen: fen };
-    res.status(200).send(data);
+    const data = await model.joinGame(gameID, sessionID);
+    if (data === false) res.sendStatus(500);
+    else res.status(200).send(data);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
+router.put('/move/:gameID', async (req, res) => {
+  try {
+    const { gameID } = req.params;
+    const { sessionID } = req;
+    const { move } = req.body;
+    const data = await model.makeMove(gameID, move, sessionID);
+    if (data === false) res.sendStatus(500);
+    else res.status(200).send(data);
   } catch (e) {
     res.sendStatus(500);
   }

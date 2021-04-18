@@ -33,16 +33,12 @@ exports.createGame = () => {
  * IDs, or false if there are already two players in the game.
  */
 exports.addPlayerToGame = (gameID, sessionID) => {
-  const sockets = db.getSessionIDs(gameID);
+  const sockets = this.getPlayersInGame(gameID);
+  if (sockets === undefined) return false;
   if (sockets.sock1 === null) {
     db.addPlayerSocketToGame(gameID, sessionID, 'sock1');
   } else if (sockets.sock2 === null) {
-    if (sessionID === sockets.sock1) {
-      return false;
-    }
-    db.addPlayerSocketToGame(gameID, sessionID, 'sock2');
-  } else {
-    return false;
+    if (!(sessionID === sockets.sock1)) db.addPlayerSocketToGame(gameID, sessionID, 'sock2');
   }
   // this.io.emit('updatePlayers', sockets);
   return sockets;
@@ -61,9 +57,7 @@ function parseData(data) {
   // a string (which is parameter data's data type) to an object
   for (let i = 0; i < data.length; i += 1) {
     const char = data.charAt(i);
-    if (char === '\'') {
-      parsedData = parsedData.replace('\'', '"');
-    }
+    if (char === '\'') parsedData = parsedData.replace('\'', '"');
   }
   return JSON.parse(parsedData);
 }
@@ -87,4 +81,52 @@ exports.chessLogic = (FEN, move = '') => {
       }
     });
   });
+};
+
+exports.joinGame = async (gameID, sessionID) => {
+  try {
+    const addPlayerSucceeded = this.addPlayerToGame(gameID, sessionID);
+    if (addPlayerSucceeded === false) return false;
+    const players = this.getPlayersInGame(gameID);
+    const fen = this.getGameFEN(gameID).FEN;
+    const legalMoves = await this.chessLogic(fen, '');
+    const data = { players: players, fen: fen, legalMoves: legalMoves };
+    return data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+exports.updateGameFEN = (gameID, fen) => db.updateFEN(gameID, fen);
+
+// This function serves to ensure whoever is trying to
+// make the move is actually one of the two chess players
+// and that it is their turn.
+exports.correctMoveMaker = (gameID, fen, sessionID) => {
+  const players = this.getPlayersInGame(gameID);
+  // Extract which player's turn it is from fen:
+  const fenAsList = fen.split('/');
+  const gameInfo = fenAsList[fenAsList.length - 1].split(' ');
+  const toMove = gameInfo[1];
+  if (toMove === 'w') {
+    if (players.sock1 === sessionID) return true;
+  } else if (toMove === 'b') {
+    if (players.sock2 === sessionID) return true;
+  }
+  return false;
+};
+
+exports.makeMove = async (gameID, move, sessionID) => {
+  try {
+    let fen = this.getGameFEN(gameID); // Get game's FEN
+    if (fen === undefined) return false;
+    fen = fen.FEN;
+    if (!this.correctMoveMaker(gameID, fen, sessionID)) return false;
+    const data = await this.chessLogic(fen, move); // Make the move
+    // If move = '', data.fen access will fail and error will be thrown. Good!
+    this.updateGameFEN(gameID, data.fen); // Update game's FEN in DB
+    return data; // Object containing fen & legalMoves
+  } catch (e) {
+    throw new Error(e);
+  }
 };
