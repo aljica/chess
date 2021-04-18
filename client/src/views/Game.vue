@@ -55,6 +55,7 @@ export default {
         self.fen = data.fen;
         console.log(data.legalMoves);
         console.log(self.fen);
+        this.fetchingFEN = false;
       } catch (e) {
         console.log('Invalid gameID');
       }
