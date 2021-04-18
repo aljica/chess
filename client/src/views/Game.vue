@@ -8,7 +8,13 @@
       <h1>Connected!</h1>
     </div>
     <div>include form here for number submission depending on whose turn it is</div>
-    <Board :id="gameID" :fen="fen" />
+    <div v-if="this.fetchingFEN === true">
+      Wait for Board
+    </div>
+    <div v-else>
+      <Board :id="gameID" :fen="fen" />
+    </div>
+    <button @click="setfen()">x</button>
   </div>
 </template>
 
@@ -26,13 +32,14 @@ export default {
       waiting: true,
       players: [null, null],
       fen: null,
+      fetchingFEN: true,
       socket: null,
       turn: null,
     };
   },
   methods: {
-    do(index) {
-      console.log(index);
+    setfen() {
+      this.fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
     },
     checkWaiting() {
       if (this.players[0] === null || this.players[1] === null) return true;
