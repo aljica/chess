@@ -2,20 +2,24 @@
   <div v-if="(this.i % 2 === 1 && this.j % 2 === 1) || (this.i % 2 === 0 && this.j % 2 === 0)">
     <b-button @click="click()" variant="light">
       <span v-if="!this.squareEmpty()">
-        <img :src="require(`../assets/chess-pieces/${this.piece}.png`)" />
+        <img width="20" height="20" :src="require(`../assets/chess-pieces/${this.piece}.png`)" />
       </span>
       <span v-else>
-        empty
+        <div>
+          emp
+        </div>
       </span>
     </b-button>
   </div>
   <div v-else-if="(this.i % 2 === 1 && this.j % 2 === 0) || (this.i % 2 === 0 && this.j % 2 === 1)">
     <b-button @click="click()" variant="secondary">
       <span v-if="!this.squareEmpty()">
-        <img :src="require(`../assets/chess-pieces/${this.piece}.png`)" />
+        <img width="20" height="20" :src="require(`../assets/chess-pieces/${this.piece}.png`)" />
       </span>
       <span v-else>
-        empty
+        <div>
+          emp
+        </div>
       </span>
     </b-button>
   </div>
