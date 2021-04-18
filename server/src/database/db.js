@@ -14,9 +14,11 @@ exports.insertNewChessGame = () => {
     db.prepare('INSERT INTO games VALUES(?, ?, ?, ?, ?, ?)').run(gameID, null, null, startingFEN, '', 0);
     return gameID;
   } catch (e) {
-    return false;
+    throw new Error(e);
   }
 };
+
+exports.updateFEN = (gameID, fen) => db.prepare('UPDATE games SET FEN = ? WHERE id = ?').run(fen, gameID);
 
 exports.getSessionIDs = (gameID) => db.prepare('SELECT sock1, sock2 FROM games WHERE id=?').get(gameID);
 

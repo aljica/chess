@@ -1,31 +1,56 @@
-const express = require("express");
-const model = require("../model.js");
+const express = require('express');
+const model = require('../model.js');
 
 const router = express.Router();
 
-router.get("/gameList", (req, res) => {
-  const games = model.getGames();
-  console.log(req.sessionID);
-  res.status(200).json({ list: games });
+router.get('/gameList', (req, res) => {
+  try {
+    const games = model.getGames();
+    console.log(req.sessionID);
+    res.status(200).json({ list: games });
+  } catch (e) {
+    res.status(500).send({ error: e });
+  }
 });
 
-router.get("/createGame", (req, res) => {
+// Post request?
+router.get('/createGame', (req, res) => {
   // Check if user already created a game in the last X seconds.
-  // Should have a database table that keeps track of sessionID and timestamp of latest game creation.
+  // Should have a database table that keeps track of sessionID
+  // and timestamp of latest game creation.
   // This should be a post request: play as white/black, time controls etc.
-  const gameID = model.createGame();
-  res.status(200).send({ gameID });
+  try {
+    const gameID = model.createGame();
+    res.status(200).send({ gameID });
+  } catch (e) {
+    res.sendStatus(500);
+  }
 });
 
-router.get("/joinGame/:gameID", (req, res) => {
-  const { gameID } = req.params;
-  const { sessionID } = req;
-  console.log(sessionID);
-  model.addPlayerToGame(gameID, sessionID);
-  const players = model.getPlayersInGame(gameID);
-  const fen = model.getGameFEN(gameID);
-  const data = {'players': players, 'fen': fen};
-  res.status(200).send(data);
+// Should probably be a PUT request, because players are updated (although not always?)
+router.get('/joinGame/:gameID', async (req, res) => {
+  try {
+    const { gameID } = req.params;
+    const { sessionID } = req;
+    const data = await model.joinGame(gameID, sessionID);
+    if (data === false) res.sendStatus(500);
+    else res.status(200).send(data);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
+router.put('/move/:gameID', async (req, res) => {
+  try {
+    const { gameID } = req.params;
+    const { sessionID } = req;
+    const { move } = req.body;
+    const data = await model.makeMove(gameID, move, sessionID);
+    if (data === false) res.sendStatus(500);
+    else res.status(200).send(data);
+  } catch (e) {
+    res.sendStatus(500);
+  }
 });
 
 module.exports = { router };

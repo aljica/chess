@@ -52,10 +52,11 @@ export default {
         const data = await response.json();
         self.players[0] = data.players.sock1;
         self.players[1] = data.players.sock2;
-        self.fen = data.fen.FEN;
-        self.fetchingFEN = false;
+        self.fen = data.fen;
+        console.log(data.legalMoves);
+        console.log(self.fen);
       } catch (e) {
-        console.log(e);
+        console.log('Invalid gameID');
       }
     },
   },

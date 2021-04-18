@@ -1,14 +1,5 @@
-const User = require("./models/user.model");
-const Game = require("./models/game.model");
-const db = require("./database/db");
-const spawn = require("child_process").spawn;
-
-/**
- * unregisteredSockets is used as a temporary pool of sockets
- * that belong to users who are yet to login.
- */
-let nextUnregisteredSocketID = 0;
-let unregisteredSockets = {};
+const spawn = require('child_process').spawn;
+const db = require('./database/db');
 
 // Will be initialized in the exports.init function
 exports.io = undefined;
@@ -23,67 +14,10 @@ exports.init = ({ io }) => {
 };
 
 /**
- * Add a socket.io socket to the pool of unregistered sockets
- * @param {SocketIO.Socket} socket - The socket.io socket to add to the pool.
- * @returns {Number} The ID of the socket in the pool of unregistered sockets.
- */
-exports.addUnregisteredSocket = (socket) => {
-  const socketID = nextUnregisteredSocketID;
-  nextUnregisteredSocketID += 1;
-
-  unregisteredSockets[socketID] = socket;
-  return socketID;
-};
-
-const assignUnregisteredSocket = (socketID) => {
-  const socket = unregisteredSockets[socketID];
-  unregisteredSockets = Object.keys(unregisteredSockets)
-    .filter((sockID) => sockID !== socketID)
-    .reduce(
-      (res, sockID) => ({ ...res, [sockID]: unregisteredSockets[sockID] }),
-      {}
-    );
-
-  return socket;
-};
-
-/**
- * Creates a user with the given name.
- * @param {String} name - The name of the user.
- * @param {Number} socketID - An optional ID of a socket.io socket in the unregistered sockets pool.
- * @see model.addUnregisteredSocket
- * @returns {void}
- */
-exports.addUser = (name, socketID = undefined) => {
-  users[name] = new User(name);
-  if (socketID !== undefined) {
-    users[name].socket = assignUnregisteredSocket(socketID);
-  }
-};
-
-/**
- * Updated the socket associated with the user with the given name.
- * @param {String} name - The name of the user.
- * @param {SocketIO.Socket} socket - A socket.io socket.
- * @returns {void}
- */
-exports.updateUserSocket = (name, socket) => {
-  users[name].socket = socket;
-};
-
-/**
- * Returns the user object with the given name.
- * @param {String} name - The name of the user.
- * @returns {User}
- */
-exports.findUser = (name) => users[name];
-
-/* Game Rooms Code Below */
-
-/**
  * Returns the user object with the given name.
  * @param {void}
- * @returns {Int/Boolean} gameID - The ID of the newly created game, or false if creation not successful.
+ * @returns {Int/Boolean} gameID - The ID of the newly created
+ * game, or false if creation not successful.
  */
 exports.createGame = () => {
   const gameID = db.insertNewChessGame();
@@ -95,19 +29,16 @@ exports.createGame = () => {
 /**
  * Returns the user object with the given name.
  * @param {Integer, String} - (gameID, socketID): ID of the game and unique ID of user's socket.
- * @returns {List/Boolean} sockets - A two-element list of socket IDs, or false if there are already two players in the game.
+ * @returns {List/Boolean} sockets - A two-element list of socket
+ * IDs, or false if there are already two players in the game.
  */
 exports.addPlayerToGame = (gameID, sessionID) => {
-  const sockets = db.getSessionIDs(gameID);
+  const sockets = this.getPlayersInGame(gameID);
+  if (sockets === undefined) return false;
   if (sockets.sock1 === null) {
-    db.addPlayerSocketToGame(gameID, sessionID, "sock1");
+    db.addPlayerSocketToGame(gameID, sessionID, 'sock1');
   } else if (sockets.sock2 === null) {
-    if (sessionID === sockets.sock1) {
-      return false;
-    }
-    db.addPlayerSocketToGame(gameID, sessionID, "sock2");
-  } else {
-    return false;
+    if (!(sessionID === sockets.sock1)) db.addPlayerSocketToGame(gameID, sessionID, 'sock2');
   }
   // this.io.emit('updatePlayers', sockets);
   return sockets;
@@ -115,49 +46,87 @@ exports.addPlayerToGame = (gameID, sessionID) => {
 
 exports.getGameFEN = (gameID) => db.getFEN(gameID);
 
-exports.getGames = () => {
-  return db.getAllGames();
-};
+exports.getGames = () => db.getAllGames();
 
 exports.getPlayersInGame = (gameID) => db.getSessionIDs(gameID);
 
 function parseData(data) {
   let parsedData = `${data}`;
-  for (let i = 0; i < data.length; i++) {
-    char = data.charAt(i);
-    if (char === '\'') {
-      parsedData = parsedData.replace('\'', '\"');
-    }
+  // Replace all instances of single-quotes to double-quotes
+  // Necessary for JSON.parse() to work, which parses
+  // a string (which is parameter data's data type) to an object
+  for (let i = 0; i < data.length; i += 1) {
+    const char = data.charAt(i);
+    if (char === '\'') parsedData = parsedData.replace('\'', '"');
   }
   return JSON.parse(parsedData);
-};
+}
 
-exports.chessLogic = (FEN, getMoves = 'yes', move = '') => {
-  const pythonProcess = spawn("python", [
-    "/home/linker/Documents/programming/chess-logic/chess-logic.py",
-    FEN, getMoves, move
+exports.chessLogic = (FEN, move = '') => {
+  /* If move === '', this function only returns legal moves
+  If move === 'g6g7', i.e. a legit move, return dict of FEN & legalmoves.
+  Otherwise, just raise an error.
+  */
+  const pythonProcess = spawn('python', [
+    '/home/linker/Documents/programming/chess-logic/chess-logic.py',
+    FEN, move,
   ]);
-  let res = null;
-  
+
   return new Promise((resolve, reject) => {
-    pythonProcess.stdout.on("data", (data) => {
-      if (getMoves === 'yes') {
-        data = data.toString()
-        const parsedData = parseData(data); // Returns data as array
-        resolve(parsedData);
-      } else if (getMoves === 'no') {
-        const FEN = data.toString();
-        if (FEN === 'failed') {
-          res = 'moveFailed';
-          reject(res);
-        } else {
-          res = FEN;
-          resolve(res);
-        }
-      } else {
-        res = 'Incorrect getMoves parameter (yes/no)';
-        reject(res);
+    pythonProcess.stdout.on('data', (data) => {
+      try {
+        resolve(parseData(data.toString()));
+      } catch (e) {
+        reject(new Error('failed to parse data'));
       }
     });
   });
+};
+
+exports.joinGame = async (gameID, sessionID) => {
+  try {
+    const addPlayerSucceeded = this.addPlayerToGame(gameID, sessionID);
+    if (addPlayerSucceeded === false) return false;
+    const players = this.getPlayersInGame(gameID);
+    const fen = this.getGameFEN(gameID).FEN;
+    const legalMoves = await this.chessLogic(fen, '');
+    const data = { players: players, fen: fen, legalMoves: legalMoves };
+    return data;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
+
+exports.updateGameFEN = (gameID, fen) => db.updateFEN(gameID, fen);
+
+// This function serves to ensure whoever is trying to
+// make the move is actually one of the two chess players
+// and that it is their turn.
+exports.correctMoveMaker = (gameID, fen, sessionID) => {
+  const players = this.getPlayersInGame(gameID);
+  // Extract which player's turn it is from fen:
+  const fenAsList = fen.split('/');
+  const gameInfo = fenAsList[fenAsList.length - 1].split(' ');
+  const toMove = gameInfo[1];
+  if (toMove === 'w') {
+    if (players.sock1 === sessionID) return true;
+  } else if (toMove === 'b') {
+    if (players.sock2 === sessionID) return true;
+  }
+  return false;
+};
+
+exports.makeMove = async (gameID, move, sessionID) => {
+  try {
+    let fen = this.getGameFEN(gameID); // Get game's FEN
+    if (fen === undefined) return false;
+    fen = fen.FEN;
+    if (!this.correctMoveMaker(gameID, fen, sessionID)) return false;
+    const data = await this.chessLogic(fen, move); // Make the move
+    // If move = '', data.fen access will fail and error will be thrown. Good!
+    this.updateGameFEN(gameID, data.fen); // Update game's FEN in DB
+    return data; // Object containing fen & legalMoves
+  } catch (e) {
+    throw new Error(e);
+  }
 };
