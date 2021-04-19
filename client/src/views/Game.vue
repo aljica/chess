@@ -35,9 +35,20 @@ export default {
       fetchingFEN: true,
       socket: null,
       turn: null,
+      selected: false,
+      possibleMoves: [],
     };
   },
   methods: {
+    squareClicked(i, j) {
+      // const square =
+      if (!this.selected) {
+        this.possibleMoves.forEach((move) => {
+          console.log(move);
+          console.log(i, j);
+        });
+      }
+    },
     setfen() {
       this.fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
     },
@@ -53,8 +64,7 @@ export default {
         self.players[0] = data.players.sock1;
         self.players[1] = data.players.sock2;
         self.fen = data.fen;
-        console.log(data.legalMoves);
-        console.log(self.fen);
+        self.possibleMoves = data.legalMoves;
         this.fetchingFEN = false;
       } catch (e) {
         console.log('Invalid gameID');

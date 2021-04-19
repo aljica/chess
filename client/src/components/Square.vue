@@ -32,7 +32,6 @@ export default {
   props: ['i', 'j', 'coordinate', 'piece'],
   methods: {
     squareEmpty() {
-      console.log('piece', this.piece);
       if (this.piece === 'e') return true;
       return false;
     },

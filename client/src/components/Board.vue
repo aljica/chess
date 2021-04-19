@@ -33,7 +33,7 @@ export default {
       // const gameInfo = this.fen.slice(piecesEnd + 1).split(' ');
       const boardRanks = this.fen.slice(0, piecesEnd).split('/');
       const dict = {};
-      let rankNumber = 1; // The current rank on the board that is inspected
+      let rankNumber = 8; // The current rank on the board that is inspected
       boardRanks.forEach((rank) => {
         const alphabetiCoordinate = this.numToAlphabet[rankNumber];
         let colNumber = 1; // The current column being inspected
@@ -53,17 +53,24 @@ export default {
             colNumber += 1;
           }
         });
-        rankNumber += 1;
+        rankNumber -= 1;
       });
       return dict;
     },
   },
   methods: {
-    clicked() {
-      console.log(this.boardAsDict);
+    numToAlpha(i) {
+      const alpha = {
+        1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'f', 7: 'g', 8: 'h',
+      };
+      return alpha[i];
     },
     print(i, j) {
-      console.log('coordinates', i, j);
+      // console.log('coordinates', i, j);
+      // const square = numToAlpha[i] + '' + j; // Which square was clicked
+      const square = `${this.numToAlpha(j)}${i}`;
+      console.log('square', square);
+      this.$parent.squareClicked(i, j);
     },
     drawBoardFromFEN() {
       console.log(this.boardAsDict);
