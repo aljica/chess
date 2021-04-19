@@ -1,9 +1,9 @@
 <template>
   <div>
     <b-container fluid="xl">
-      <b-row align-v="end" v-for="i in 8" :key="i">
+      <b-row align-v="end" v-for="i in [8,7,6,5,4,3,2,1]" :key="i">
         <b-col offset="*" lg="*" v-for="j in 8" :key="j">
-          <Square :i="i" :j="j" :piece="boardAsDict[numToAlphabet[i]+''+j]" @clicked="print(i, j)"/>
+          <Square :i="i" :j="j" :piece="boardAsDict[numToAlphabet[j]+''+i]" @clicked="print(i, j)"/>
         </b-col>
       </b-row>
     </b-container>
