@@ -47,12 +47,15 @@ export default {
       return alpha[i];
     },
     squareClicked(i, j) {
-      const square = `${this.numToAlpha(j)}${i}`;
+      const square = `${this.numToAlpha(j)}${i}`; // The square (chess coordinates) user clicked
       console.log('square', square);
       if (!this.selected) {
         this.possibleMoves.forEach((move) => {
-          console.log(move);
-          console.log(i, j);
+          // move is "a2a4" or "g2g3" etc. Origin square to destination square.
+          const originSquare = `${move[0]}${move[1]}`; // move FROM square TO square. This gets the FROM square.
+          if (square === originSquare) {
+            console.log('valid!');
+          }
         });
       }
     },
