@@ -35,7 +35,7 @@ export default {
       fetchingFEN: true,
       socket: null,
       turn: null,
-      selected: false,
+      selected: null,
       possibleMoves: [],
     };
   },
@@ -47,17 +47,24 @@ export default {
       return alpha[i];
     },
     squareClicked(i, j) {
-      const square = `${this.numToAlpha(j)}${i}`; // The square (chess coordinates) user clicked
-      console.log('square', square);
-      if (!this.selected) {
-        this.possibleMoves.forEach((move) => {
-          // move is "a2a4" or "g2g3" etc. Origin square to destination square.
-          const originSquare = `${move[0]}${move[1]}`; // move FROM square TO square. This gets the FROM square.
-          if (square === originSquare) {
-            console.log('valid!');
+      const chosenSquare = `${this.numToAlpha(j)}${i}`; // The square (chess coordinates) user clicked
+      this.possibleMoves.forEach((move) => {
+        const sourceSquare = `${move[0]}${move[1]}`; // move FROM square TO square. This gets the FROM square (source square).
+        if (!this.selected) {
+          if (chosenSquare === sourceSquare) {
+            this.selected = chosenSquare;
+            console.log('selected!', this.selected);
           }
-        });
-      }
+        } else {
+          const destinationSquare = `${move[2]}${move[3]}`; // Destination square.
+          if (this.selected === sourceSquare) {
+            if (chosenSquare === destinationSquare) {
+              this.selected = null;
+              console.log('move made!', destinationSquare);
+            }
+          }
+        }
+      });
     },
     setfen() {
       this.fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
