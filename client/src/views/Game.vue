@@ -40,8 +40,15 @@ export default {
     };
   },
   methods: {
+    numToAlpha(i) {
+      const alpha = {
+        1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'f', 7: 'g', 8: 'h',
+      };
+      return alpha[i];
+    },
     squareClicked(i, j) {
-      // const square =
+      const square = `${this.numToAlpha(j)}${i}`;
+      console.log('square', square);
       if (!this.selected) {
         this.possibleMoves.forEach((move) => {
           console.log(move);
