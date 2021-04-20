@@ -68,15 +68,17 @@ export default {
               console.log('move made!', destinationSquare);
               console.log('full move', move);
               try {
-                const response = await fetch(`http://localhost:8989/api/move/${this.gameID}`, {
+                const response = await fetch(`/api/move/${this.gameID}`, {
                   method: 'PUT',
-                  body: { move },
-                  credentials: 'include',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ move }),
                 });
                 const data = await response.json();
                 console.log(data);
-                // this.fen = data.fen;
-                // this.possibleMoves = data.legalMoves;
+                this.fen = data.fen;
+                this.possibleMoves = data.legalMoves;
               } catch (e) {
                 console.log('failed to make move', e);
               }
