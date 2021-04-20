@@ -48,6 +48,11 @@ export default {
     },
     squareClicked(i, j) {
       const chosenSquare = `${this.numToAlpha(j)}${i}`; // The square (chess coordinates) user clicked
+      if (chosenSquare === this.selected) {
+        this.selected = null;
+        console.log('piece returned to its place');
+        return;
+      }
       this.possibleMoves.forEach((move) => {
         const sourceSquare = `${move[0]}${move[1]}`; // move FROM square TO square. This gets the FROM square (source square).
         if (!this.selected) {
