@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/gameList', (req, res) => {
   try {
+    console.log('gamelist CALLED!');
     const games = model.getGames();
     console.log(req.sessionID);
     res.status(200).json({ list: games });
@@ -45,6 +46,7 @@ router.put('/move/:gameID', async (req, res) => {
     const { gameID } = req.params;
     const { sessionID } = req;
     const { move } = req.body;
+    console.log('body', req.body);
     const data = await model.makeMove(gameID, move, sessionID);
     if (data === false) res.sendStatus(500);
     else res.status(200).send(data);

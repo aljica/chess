@@ -53,7 +53,7 @@ export default {
         console.log('piece returned to its place');
         return;
       }
-      this.possibleMoves.forEach((move) => {
+      this.possibleMoves.forEach(async (move) => {
         const sourceSquare = `${move[0]}${move[1]}`; // move FROM square TO square. This gets the FROM square (source square).
         if (!this.selected) {
           if (chosenSquare === sourceSquare) {
@@ -66,6 +66,20 @@ export default {
             if (chosenSquare === destinationSquare) {
               this.selected = null;
               console.log('move made!', destinationSquare);
+              console.log('full move', move);
+              try {
+                const response = await fetch(`http://localhost:8989/api/move/${this.gameID}`, {
+                  method: 'PUT',
+                  body: { move },
+                  credentials: 'include',
+                });
+                const data = await response.json();
+                console.log(data);
+                // this.fen = data.fen;
+                // this.possibleMoves = data.legalMoves;
+              } catch (e) {
+                console.log('failed to make move', e);
+              }
             }
           }
         }
@@ -81,7 +95,7 @@ export default {
     async join() {
       const self = this;
       try {
-        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'include' }); // 'same-origin' on credentials? if so, why?
+        const response = await fetch(`/api/joinGame/${this.gameID}`); // 'same-origin' on credentials? if so, why?
         const data = await response.json();
         self.players[0] = data.players.sock1;
         self.players[1] = data.players.sock2;
