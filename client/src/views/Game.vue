@@ -113,12 +113,13 @@ export default {
     this.join();
 
     // this.socket = this.$root.socket;
-    /* this.socket.on('updatePlayers', (players) => {
-      console.log('from game socket');
-      console.log(this.players);
-      this.players = players;
-      console.log(this.players);
-    }); */
+    this.$socket.client.emit('joinGame', this.gameID);
+
+    this.$socket.client.on('moveMade', (data) => {
+      console.log('data', data);
+      this.fen = data.fen;
+      this.possibleMoves = data.legalMoves;
+    });
   },
 };
 </script>
