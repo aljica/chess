@@ -91,6 +91,7 @@ exports.joinGame = async (gameID, sessionID) => {
     const fen = this.getGameFEN(gameID).FEN;
     const legalMoves = await this.chessLogic(fen, '');
     const data = { players: players, fen: fen, legalMoves: legalMoves };
+    this.io.in(gameID).emit('playerJoined', players);
     return data;
   } catch (e) {
     throw new Error(e);

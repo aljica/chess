@@ -115,6 +115,10 @@ export default {
     // this.socket = this.$root.socket;
     this.$socket.client.emit('joinGame', this.gameID);
 
+    this.$socket.client.on('playerJoined', (players) => {
+      this.players = players;
+    });
+
     this.$socket.client.on('moveMade', (data) => {
       console.log('data', data);
       this.fen = data.fen;
