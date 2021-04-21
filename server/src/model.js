@@ -123,6 +123,10 @@ exports.makeMove = async (gameID, move, sessionID) => {
     fen = fen.FEN;
     if (!this.correctMoveMaker(gameID, fen, sessionID)) return false;
     const data = await this.chessLogic(fen, move); // Make the move
+    // Below means that the move was unsuccessful for w/e reason,
+    // such as move parameter being undefined
+    // which could happen if API caller sends in wrong data in the PUT request's body.
+    if (data.fen === undefined) return false;
     // If move = '', data.fen access will fail and error will be thrown. Good!
     this.updateGameFEN(gameID, data.fen); // Update game's FEN in DB
     return data; // Object containing fen & legalMoves

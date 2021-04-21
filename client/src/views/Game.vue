@@ -35,9 +35,58 @@ export default {
       fetchingFEN: true,
       socket: null,
       turn: null,
+      selected: null,
+      possibleMoves: [],
     };
   },
   methods: {
+    numToAlpha(i) {
+      const alpha = {
+        1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'f', 7: 'g', 8: 'h',
+      };
+      return alpha[i];
+    },
+    squareClicked(i, j) {
+      const chosenSquare = `${this.numToAlpha(j)}${i}`; // The square (chess coordinates) user clicked
+      if (chosenSquare === this.selected) {
+        this.selected = null;
+        console.log('piece returned to its place');
+        return;
+      }
+      this.possibleMoves.forEach(async (move) => {
+        const sourceSquare = `${move[0]}${move[1]}`; // move FROM square TO square. This gets the FROM square (source square).
+        if (!this.selected) {
+          if (chosenSquare === sourceSquare) {
+            this.selected = chosenSquare;
+            console.log('selected!', this.selected);
+          }
+        } else {
+          const destinationSquare = `${move[2]}${move[3]}`; // Destination square.
+          if (this.selected === sourceSquare) {
+            if (chosenSquare === destinationSquare) {
+              this.selected = null;
+              console.log('move made!', destinationSquare);
+              console.log('full move', move);
+              try {
+                const response = await fetch(`/api/move/${this.gameID}`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ move }),
+                });
+                const data = await response.json();
+                console.log(data);
+                this.fen = data.fen;
+                this.possibleMoves = data.legalMoves;
+              } catch (e) {
+                console.log('failed to make move', e);
+              }
+            }
+          }
+        }
+      });
+    },
     setfen() {
       this.fen = 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1';
     },
@@ -48,13 +97,12 @@ export default {
     async join() {
       const self = this;
       try {
-        const response = await fetch(`http://localhost:8989/api/joinGame/${this.gameID}`, { credentials: 'include' }); // 'same-origin' on credentials? if so, why?
+        const response = await fetch(`/api/joinGame/${this.gameID}`); // 'same-origin' on credentials? if so, why?
         const data = await response.json();
         self.players[0] = data.players.sock1;
         self.players[1] = data.players.sock2;
         self.fen = data.fen;
-        console.log(data.legalMoves);
-        console.log(self.fen);
+        self.possibleMoves = data.legalMoves;
         this.fetchingFEN = false;
       } catch (e) {
         console.log('Invalid gameID');

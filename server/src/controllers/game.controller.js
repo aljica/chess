@@ -6,7 +6,6 @@ const router = express.Router();
 router.get('/gameList', (req, res) => {
   try {
     const games = model.getGames();
-    console.log(req.sessionID);
     res.status(200).json({ list: games });
   } catch (e) {
     res.status(500).send({ error: e });
