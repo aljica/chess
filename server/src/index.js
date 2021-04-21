@@ -21,8 +21,8 @@ const app = express(); // Creates express app
 const httpServer = http.Server(app);
 const io = require('socket.io')(httpServer); // Creates socket.io app
 
-// Required 
-/*var cors = require('cors');
+// Required
+/* var cors = require('cors');
 
 // Add headers. So that frontend can access backend API.
 const corsOptions = {
@@ -30,7 +30,7 @@ const corsOptions = {
   allowedHeaders: true,
   credentials: true
 };
-app.use(cors(corsOptions));*/
+app.use(cors(corsOptions)); */
 
 // Setup middleware
 app.use(betterLogging.expressMiddleware(console, {
@@ -86,6 +86,10 @@ io.on('connection', (socket) => {
     console.log(data);
     io.emit('event', data);
   });*/
+
+  socket.on('joinGame', (gameID) => {
+    socket.join(gameID);
+  });
 
   socket.on('disconnect', () => console.log('disconnected'));
 });

@@ -129,6 +129,7 @@ exports.makeMove = async (gameID, move, sessionID) => {
     if (data.fen === undefined) return false;
     // If move = '', data.fen access will fail and error will be thrown. Good!
     this.updateGameFEN(gameID, data.fen); // Update game's FEN in DB
+    this.io.in(gameID).emit('moveMade', data);
     return data; // Object containing fen & legalMoves
   } catch (e) {
     throw new Error(e);
