@@ -2,13 +2,17 @@
  * @class User
  */
 class User {
-  constructor(name) {
-    this.id = Math.random();
+  constructor(name, password) {
     this.name = name;
+    this.password = password;
   }
 
-  getID() {
-    return this.id;
+  getName() {
+    return this.name;
+  }
+
+  getPassword() {
+    return this.password;
   }
 }
 

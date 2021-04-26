@@ -1,7 +1,7 @@
 const path = require('path'); //  Helps resolve relative paths, into absolute baths, independent of operating system
 
 const databasePath = path.join(__dirname, '..', 'db.sqlite');
-const db = require('better-sqlite3')('x.db', { databasePath });
+const db = require('better-sqlite3')('games.db', { databasePath });
 
 db.prepare('DROP TABLE IF EXISTS games').run();
 // Unique sock1/sock2 so player can only ever be in 1 game at a time?
