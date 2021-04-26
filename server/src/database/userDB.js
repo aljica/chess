@@ -6,12 +6,21 @@ const db = require('better-sqlite3')('users.db', { databasePath });
 db.prepare('DROP TABLE IF EXISTS users').run();
 db.prepare('DROP TABLE IF EXISTS sessions').run();
 db.prepare('CREATE TABLE users (username TEXT UNIQUE, userData TEXT)').run();
-db.prepare('CREATE TABLE sessions (userid INTEGER UNIQUE, sessionid TEXT UNIQUE)').run();
+db.prepare('CREATE TABLE sessions (username INTEGER UNIQUE, sessionid TEXT UNIQUE)').run();
 
-exports.linkUserAndSession = (sessionID, userID) => {
-  db.prepare('INSERT INTO sessions VALUES(?,?)').run(sessionID, userID);
-  const data = db.prepare('SELECT * FROM sessions WHERE sessionid=?').get(sessionID);
-  console.log(data);
+exports.getUser = (username) => db.prepare('SELECT username FROM users WHERE username=?').get(username);
+
+exports.linkUserAndSession = (sessionID, username) => {
+  try {
+    const user = this.getUser(username);
+    if (user === undefined) throw new Error('username does not exist');
+    db.prepare('INSERT INTO sessions VALUES(?,?)').run(username, sessionID);
+    const data = db.prepare('SELECT * FROM sessions WHERE username=?').get(username);
+    console.log('test', data);
+    return true;
+  } catch (e) {
+    throw new Error(e);
+  }
 };
 
 exports.addUser = (username, userData) => {
