@@ -1,5 +1,6 @@
 const spawn = require('child_process').spawn;
 const db = require('./database/db');
+const User = require('./models/user.model');
 
 // Will be initialized in the exports.init function
 exports.io = undefined;

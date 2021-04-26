@@ -3,8 +3,12 @@
  */
 class User {
   constructor(name) {
-    this.socket = null;
+    this.id = Math.random();
     this.name = name;
+  }
+
+  getID() {
+    return this.id;
   }
 }
 
