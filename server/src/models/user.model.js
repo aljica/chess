@@ -1,8 +1,11 @@
 /**
  * @class User
  */
+
 class User {
   constructor(name, password) {
+    if (name.length === 0 || name.length > 15) throw new Error('length');
+
     this.name = name;
     this.password = password;
   }
