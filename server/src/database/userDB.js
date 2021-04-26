@@ -15,7 +15,11 @@ exports.linkUserAndSession = (sessionID, userID) => {
 };
 
 exports.addUser = (username, userData) => {
-  db.prepare('INSERT INTO users VALUES(?,?)').run(username, userData);
+  try {
+    db.prepare('INSERT INTO users VALUES(?,?)').run(username, userData);
+  } catch (e) {
+    throw new Error(e);
+  }
   const user = db.prepare('SELECT * FROM users WHERE username=?').get(username);
   console.log('us', user);
   const userAsObj = JSON.parse(user.userData);

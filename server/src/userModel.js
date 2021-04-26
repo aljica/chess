@@ -7,25 +7,26 @@ const saltRounds = 10;
 function hashPassword(password) {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
-      if (err) reject(err);
-      resolve(hash);
+      if (err) return reject(err);
+      return resolve(hash);
     });
   });
 }
 
 exports.addUser = async (username, password) => {
-  let user = null;
-  const hash = await hashPassword(password);
-  console.log(hash);
+  if (username.length === 0 || username.length > 15) throw new Error('username problem');
+  if (password.length === 0 || password.length > 15) throw new Error('password problem');
 
+  let hash = null;
   try {
-    user = new User(username, hash);
+    hash = await hashPassword(password);
+    let user = new User(username, hash);
+    user = JSON.stringify(user);
+    console.log('model', user);
+    db.addUser(username, user);
+    return true;
   } catch (e) {
     console.log(e);
     return false;
   }
-  user = JSON.stringify(user);
-  console.log('model', user);
-  db.addUser(username, user);
-  return true;
 };
