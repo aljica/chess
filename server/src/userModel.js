@@ -14,11 +14,10 @@ function hashPassword(password) {
 }
 
 exports.addUser = async (username, password) => {
-  if (username.length === 0 || username.length > 15) throw new Error('username problem');
-  if (password.length === 0 || password.length > 15) throw new Error('password problem');
-
   let hash = null;
   try {
+    if (username.length === 0 || username.length > 15) throw new Error('username problem');
+    if (password.length === 0 || password.length > 15) throw new Error('password problem');
     hash = await hashPassword(password);
     let user = new User(username, hash);
     user = JSON.stringify(user);
