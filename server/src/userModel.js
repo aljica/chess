@@ -27,4 +27,5 @@ exports.addUser = async (username, password) => {
   user = JSON.stringify(user);
   console.log('model', user);
   db.addUser(username, user);
+  return true;
 };
