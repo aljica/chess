@@ -8,15 +8,16 @@ db.prepare('DROP TABLE IF EXISTS sessions').run();
 db.prepare('CREATE TABLE users (username TEXT UNIQUE, userData TEXT)').run();
 db.prepare('CREATE TABLE sessions (username INTEGER UNIQUE, sessionid TEXT UNIQUE)').run();
 
-exports.getUser = (username) => db.prepare('SELECT username FROM users WHERE username=?').get(username);
+exports.getUser = (username) => db.prepare('SELECT userData FROM users WHERE username=?').get(username);
 
 exports.linkUserAndSession = (sessionID, username) => {
   try {
-    const user = this.getUser(username);
-    if (user === undefined) throw new Error('username does not exist');
-    db.prepare('INSERT INTO sessions VALUES(?,?)').run(username, sessionID);
-    const data = db.prepare('SELECT * FROM sessions WHERE username=?').get(username);
-    console.log('test', data);
+    const currentSessionID = db.prepare('SELECT sessionid FROM sessions WHERE username=?').get(username);
+    if (currentSessionID !== undefined) {
+      db.prepare('UPDATE sessions SET sessionid=? WHERE username=?').run(sessionID, username);
+    } else {
+      db.prepare('INSERT INTO sessions VALUES(?,?)').run(username, sessionID);
+    }
     return true;
   } catch (e) {
     throw new Error(e);
@@ -26,11 +27,8 @@ exports.linkUserAndSession = (sessionID, username) => {
 exports.addUser = (username, userData) => {
   try {
     db.prepare('INSERT INTO users VALUES(?,?)').run(username, userData);
+    return true;
   } catch (e) {
     throw new Error(e);
   }
-  const user = db.prepare('SELECT * FROM users WHERE username=?').get(username);
-  console.log('us', user);
-  const userAsObj = JSON.parse(user.userData);
-  console.log(userAsObj.name);
 };
