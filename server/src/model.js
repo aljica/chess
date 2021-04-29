@@ -1,5 +1,6 @@
 const spawn = require('child_process').spawn;
 const db = require('./database/db');
+const userDB = require('./database/userDB');
 
 // Will be initialized in the exports.init function
 exports.io = undefined;
@@ -19,7 +20,7 @@ exports.init = ({ io }) => {
  * @returns {Int/Boolean} gameID - The ID of the newly created
  * game, or false if creation not successful.
  */
-exports.createGame = () => {
+exports.createGame = (sessionID) => {
   const gameID = db.insertNewChessGame();
   // this.io.emit('updateGames', this.getGames());
   // exports.io.emit("event", 4);

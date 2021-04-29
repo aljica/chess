@@ -19,7 +19,8 @@ router.get('/createGame', (req, res) => {
   // and timestamp of latest game creation.
   // This should be a post request: play as white/black, time controls etc.
   try {
-    const gameID = model.createGame();
+    const { sessionID } = req;
+    const gameID = model.createGame(sessionID);
     res.status(200).send({ gameID });
   } catch (e) {
     res.sendStatus(500);
