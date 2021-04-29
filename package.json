@@ -17,7 +17,9 @@
     "server:lint:fix": "cd server && npm run lint:fix",
     "lint:fix": "npm run client:lint:fix && npm run server:lint:fix"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bcrypt": "^5.0.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/aljica/chess.git"
