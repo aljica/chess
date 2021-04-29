@@ -138,10 +138,15 @@ exports.correctMoveMaker = (gameID, fen, sessionID) => {
 
 exports.makeMove = async (gameID, move, sessionID) => {
   try {
+    let userIdentifier = sessionID; // Identify user by sessionID or by username
+    // depending on whether or not they're logged in.
+    const username = userDB.getUserBySession(sessionID);
+    if (username !== null) userIdentifier = username;
+
     let fen = this.getGameFEN(gameID); // Get game's FEN
     if (fen === undefined) return false;
     fen = fen.FEN;
-    if (!this.correctMoveMaker(gameID, fen, sessionID)) return false;
+    if (!this.correctMoveMaker(gameID, fen, userIdentifier)) return false;
     const data = await this.chessLogic(fen, move); // Make the move
     // Below means that the move was unsuccessful for w/e reason,
     // such as move parameter being undefined
