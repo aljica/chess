@@ -19,7 +19,7 @@ exports.getUser = (username) => db.prepare('SELECT userData FROM users WHERE use
 exports.getUserBySession = (sessionID) => {
   try {
     const username = db.prepare('SELECT username FROM sessions WHERE sessionid=?').get(sessionID);
-    if (username === undefined) return false; // no such username-sessionid pairing exists.
+    if (username === undefined) return null; // no such username-sessionid pairing exists.
     return username.username;
   } catch (e) {
     throw new Error(e);
