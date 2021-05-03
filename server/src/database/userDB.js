@@ -40,6 +40,9 @@ exports.linkUserAndSession = (sessionID, username) => {
   }
 };
 
+// Returns integer (number of changes - in this case deletions - made).
+exports.deleteUserSession = (username) => db.prepare('DELETE FROM sessions WHERE username=?').run(username).changes;
+
 exports.addUser = (username, userData) => {
   try {
     db.prepare('INSERT INTO users VALUES(?,?)').run(username, userData);
