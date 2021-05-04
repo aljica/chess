@@ -14,8 +14,6 @@ function init() {
 
 init();
 
-exports.getUser = (username) => db.prepare('SELECT userData FROM users WHERE username=?').get(username);
-
 exports.getUserBySession = (sessionID) => {
   try {
     const username = db.prepare('SELECT username FROM sessions WHERE sessionid=?').get(sessionID);
@@ -46,8 +44,11 @@ exports.deleteUserSession = (username) => db.prepare('DELETE FROM sessions WHERE
 exports.addUser = (username, userData) => {
   try {
     db.prepare('INSERT INTO users VALUES(?,?)').run(username, userData);
+    db.prepare('INSERT INTO stats VALUES(?, 0, 0, 0)').run(username);
     return true;
   } catch (e) {
     throw new Error(e);
   }
 };
+
+exports.getUser = (username) => db.prepare('SELECT userData FROM users WHERE username=?').get(username);
