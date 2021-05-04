@@ -56,7 +56,9 @@ exports.createGame = (sessionID) => {
  * @returns {List/Boolean} sockets - A two-element list of socket
  * IDs, or false if there are already two players in the game.
  */
+// sessionID is actually userIdentifier (per username or by sessionID).
 exports.addPlayerToGame = (gameID, sessionID) => {
+  console.log('sess', sessionID);
   const sockets = this.getPlayersInGame(gameID);
   if (sockets === undefined) return false;
   if (sockets.sock1 === null) {
