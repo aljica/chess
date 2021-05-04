@@ -18,6 +18,8 @@ exports.insertNewChessGame = () => {
   }
 };
 
+exports.deleteChessGame = (gameID) => db.prepare('DELETE FROM games WHERE id=?').run(gameID).changes;
+
 exports.updateFEN = (gameID, fen) => db.prepare('UPDATE games SET FEN = ? WHERE id = ?').run(fen, gameID);
 
 exports.getSessionIDs = (gameID) => db.prepare('SELECT sock1, sock2 FROM games WHERE id=?').get(gameID);
