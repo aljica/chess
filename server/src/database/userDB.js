@@ -52,3 +52,9 @@ exports.addUser = (username, userData) => {
 };
 
 exports.getUser = (username) => db.prepare('SELECT userData FROM users WHERE username=?').get(username);
+
+// Value tells us what to increment
+// Returns number of changes made (0 if none, 1 if succeeded)
+exports.updateUserStats = (username, value) => db.prepare(`UPDATE stats SET ${value} = ${value} + 1 WHERE username=?`).run(username).changes;
+
+exports.getUserStats = (username) => db.prepare('SELECT * FROM stats WHERE username=?').get(username);
