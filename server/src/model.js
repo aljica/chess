@@ -111,8 +111,11 @@ exports.joinGame = async (gameID, sessionID) => {
     const username = userDB.getUserBySession(sessionID);
     if (username !== null) userIdentifier = username;
 
-    const addPlayerSucceeded = this.addPlayerToGame(gameID, userIdentifier);
-    if (addPlayerSucceeded === false) return false;
+    if (!userExceededGameLimit(userIdentifier)) {
+      const addPlayerSucceeded = this.addPlayerToGame(gameID, userIdentifier);
+      if (addPlayerSucceeded === false) return false;
+    }
+
     const players = this.getPlayersInGame(gameID);
     const fen = this.getGameFEN(gameID).FEN;
     const legalMoves = await this.chessLogic(fen, '');
