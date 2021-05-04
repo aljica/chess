@@ -20,6 +20,12 @@ function userExceededGameLimit(userIdentifier, gameLimit = 1) {
   return false;
 }
 
+function getUserIdentifier(sessionID) {
+  const username = userDB.getUserBySession(sessionID);
+  if (username !== null) return username;
+  return sessionID;
+}
+
 /**
  * Returns the user object with the given name.
  * @param {void}
@@ -27,10 +33,7 @@ function userExceededGameLimit(userIdentifier, gameLimit = 1) {
  * game, or false if creation not successful.
  */
 exports.createGame = (sessionID) => {
-  let userIdentifier = sessionID; // Identify user by sessionID or by username
-  // depending on whether or not they're logged in.
-  const username = userDB.getUserBySession(sessionID);
-  if (username !== null) userIdentifier = username;
+  const userIdentifier = getUserIdentifier(sessionID);
 
   // Check if user is allowed to create a new game.
   if (userExceededGameLimit(userIdentifier)) throw new Error('User is already in max number of games, cannot create a new one.');
@@ -106,10 +109,7 @@ exports.chessLogic = (FEN, move = '') => {
 
 exports.joinGame = async (gameID, sessionID) => {
   try {
-    let userIdentifier = sessionID; // Identify user by sessionID or by username
-    // depending on whether or not they're logged in.
-    const username = userDB.getUserBySession(sessionID);
-    if (username !== null) userIdentifier = username;
+    const userIdentifier = getUserIdentifier(sessionID);
 
     if (!userExceededGameLimit(userIdentifier)) {
       const addPlayerSucceeded = this.addPlayerToGame(gameID, userIdentifier);
