@@ -62,7 +62,10 @@ exports.addPlayerToGame = (gameID, sessionID) => {
   if (sockets.sock1 === null) {
     db.addPlayerSocketToGame(gameID, sessionID, 'sock1');
   } else if (sockets.sock2 === null) {
-    if (!(sessionID === sockets.sock1)) db.addPlayerSocketToGame(gameID, sessionID, 'sock2');
+    if (!(sessionID === sockets.sock1)) {
+      db.addPlayerSocketToGame(gameID, sessionID, 'sock2');
+      userDB.updateUserStats(sessionID, 'playedgames'); // Increment # played games.
+    }
   }
   // this.io.emit('updatePlayers', sockets);
   return sockets;
