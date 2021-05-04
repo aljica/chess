@@ -14,6 +14,12 @@ exports.init = ({ io }) => {
   exports.io = io;
 };
 
+function userExceededGameLimit(userIdentifier, gameLimit = 1) {
+  const userGames = db.getGamesByUserID(userIdentifier);
+  if (userGames.length >= gameLimit) return true;
+  return false;
+}
+
 /**
  * Returns the user object with the given name.
  * @param {void}
@@ -27,11 +33,12 @@ exports.createGame = (sessionID) => {
   if (username !== null) userIdentifier = username;
 
   // Check if user is allowed to create a new game.
-  const userGames = db.getGamesByUserID(userIdentifier);
+  if (userExceededGameLimit(userIdentifier)) throw new Error('User is already in max number of games, cannot create a new one.');
+  /* const userGames = db.getGamesByUserID(userIdentifier);
   const gameLimit = 1; // Number of concurrent games user is allowed.
   // TODO: Should be fetched from database (premium users can play more games at once).
   console.log('userGames', userGames);
-  if (userGames.length >= gameLimit) throw new Error('User is already in max number of games, cannot create a new one.');
+  if (userGames.length >= gameLimit) throw new Error('User is already in max number of games, cannot create a new one.'); */
 
   // If user is not currently in a game, let them create a new one.
   const gameID = db.insertNewChessGame();
