@@ -50,6 +50,45 @@ exports.createGame = (sessionID) => {
   return gameID;
 };
 
+// Checks if game exists & ensures user making data requests to/from the game is actually part
+// of the game. Returns userIdentifier of the opposing player.
+function validatePlayersAndGetOpponent(gameID, userIdentifier) {
+  const players = db.getSessionIDs(gameID);
+  if (players === undefined) throw new Error('no such gameID exists');
+  if (players.sock1 === userIdentifier) return players.sock2;
+  if (players.sock2 === userIdentifier) return players.sock1;
+  throw new Error('user not part of the game');
+}
+
+/**
+ * Ends a game.
+ * @param {Integer} gameID - The ID of the game
+ * @param {String} userIdentifier - Username/SessionID of player making the request
+ * @param {String} result - "draw" or "resign"
+ * @returns {Boolean} _ - true (for success) or false for failure
+ */
+exports.endGame = (gameID, userIdentifier, result) => {
+  let opponentIdentifier = null;
+  try {
+    opponentIdentifier = validatePlayersAndGetOpponent(gameID, userIdentifier);
+  } catch (e) {
+    throw new Error(e);
+  }
+
+  switch (result) {
+    case 'resign': {
+      const changes = db.deleteChessGame(gameID);
+      if (changes === 0) return 'resignation unsuccessful for some reason';
+      const statsChanges = userDB.updateUserStats(opponentIdentifier, 'won');
+      if (statsChanges === 0) console.log('could not update user stats, user not registered?');
+      return 'resigned successfully';
+    }
+    default: {
+      throw new Error('result is invalid');
+    }
+  }
+};
+
 /**
  * Returns the user object with the given name.
  * @param {Integer, String} - (gameID, socketID): ID of the game and unique ID of user's socket.
@@ -125,7 +164,12 @@ exports.joinGame = async (gameID, sessionID) => {
     const fen = this.getGameFEN(gameID).FEN;
     const legalMoves = await this.chessLogic(fen, '');
     const data = { players: players, fen: fen, legalMoves: legalMoves };
-    this.io.in(gameID).emit('playerJoined', players);
+    // this.io.in(gameID).emit('playerJoined', players);
+    // Update user stats here (increment playedgames) if players.sock1 and players.sock2 are set.
+    if (players.sock1 !== null && players.sock2 !== null) {
+      userDB.updateUserStats(players.sock1, 'playedgames');
+      userDB.updateUserStats(players.sock2, 'playedgames');
+    }
     return data;
   } catch (e) {
     throw new Error(e);
