@@ -17,9 +17,11 @@ router.post('/register', async (req, res) => {
   try {
     const { username } = req.body;
     const { password } = req.body;
-    await userModel.addUser(username, password);
-    res.sendStatus(200);
+    const registrationSucceeded = await userModel.addUser(username, password);
+    if (registrationSucceeded === false) res.sendStatus(500);
+    else res.sendStatus(200);
   } catch (e) {
+    console.log(e);
     res.sendStatus(500);
   }
 });
