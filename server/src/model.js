@@ -213,6 +213,12 @@ exports.makeMove = async (gameID, move, sessionID) => {
     fen = fen.FEN;
     if (!this.correctMoveMaker(gameID, fen, userIdentifier)) return false;
     const data = await this.chessLogic(fen, move); // Make the move
+    /* if (data[0] === 'checkmate') {
+      const opponent = validatePlayersAndGetOpponent(gameID, userIdentifier);
+      this.endGame(gameID, opponent, 'resign');
+      console.log('checkmate');
+      return true;
+    } */
     /*
     if (data[0] === 'checkmate') console.log('checkmate');
     if (data[0] === 'insufficient') console.log('draw');
