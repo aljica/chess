@@ -83,6 +83,14 @@ exports.endGame = (gameID, userIdentifier, result) => {
       if (statsChanges === 0) console.log('could not update user stats, user not registered?');
       return 'resigned successfully';
     }
+    case 'draw': {
+      const changes = db.deleteChessGame(gameID);
+      if (changes === 0) return 'draw unsuccessful for some reason';
+      const statsChange1 = userDB.updateUserStats(userIdentifier, 'drawn');
+      const statsChange2 = userDB.updateUserStats(opponentIdentifier, 'drawn');
+      if (statsChange1 === 0 || statsChange2 === 0) console.log('could not update user stats for draw');
+      return 'draw';
+    }
     default: {
       throw new Error('result is invalid');
     }
@@ -167,7 +175,7 @@ exports.joinGame = async (gameID, sessionID) => {
     const fen = this.getGameFEN(gameID).FEN;
     const legalMoves = await this.chessLogic(fen, '');
     const data = { players: players, fen: fen, legalMoves: legalMoves };
-    this.io.in(gameID).emit('playerJoined', players);
+    // this.io.in(gameID).emit('playerJoined', players);
     return data;
   } catch (e) {
     throw new Error(e);
