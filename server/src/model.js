@@ -106,6 +106,9 @@ exports.addPlayerToGame = (gameID, sessionID) => {
     if (!(sessionID === sockets.sock1)) {
       db.addPlayerSocketToGame(gameID, sessionID, 'sock2');
       userDB.updateUserStats(sessionID, 'playedgames'); // Increment # played games.
+      // Get opponent (first person who joined) to update their stats.
+      const player1 = validatePlayersAndGetOpponent(gameID, sessionID);
+      userDB.updateUserStats(player1, 'playedgames');
     }
   }
   // this.io.emit('updatePlayers', sockets);
