@@ -164,12 +164,7 @@ exports.joinGame = async (gameID, sessionID) => {
     const fen = this.getGameFEN(gameID).FEN;
     const legalMoves = await this.chessLogic(fen, '');
     const data = { players: players, fen: fen, legalMoves: legalMoves };
-    // this.io.in(gameID).emit('playerJoined', players);
-    // Update user stats here (increment playedgames) if players.sock1 and players.sock2 are set.
-    if (players.sock1 !== null && players.sock2 !== null) {
-      userDB.updateUserStats(players.sock1, 'playedgames');
-      userDB.updateUserStats(players.sock2, 'playedgames');
-    }
+    this.io.in(gameID).emit('playerJoined', players);
     return data;
   } catch (e) {
     throw new Error(e);
@@ -207,6 +202,10 @@ exports.makeMove = async (gameID, move, sessionID) => {
     fen = fen.FEN;
     if (!this.correctMoveMaker(gameID, fen, userIdentifier)) return false;
     const data = await this.chessLogic(fen, move); // Make the move
+    /*
+    if (data[0] === 'checkmate') console.log('checkmate');
+    if (data[0] === 'insufficient') console.log('draw');
+    */
     // Below means that the move was unsuccessful for w/e reason,
     // such as move parameter being undefined
     // which could happen if API caller sends in wrong data in the PUT request's body.
