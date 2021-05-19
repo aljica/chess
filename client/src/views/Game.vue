@@ -54,7 +54,7 @@ export default {
         });
         const data = await response.json();
         if (data.resign === 'success') {
-          self.resign = true;
+          self.setResign();
         } else {
           console.log('you are not an active player...');
         }
@@ -64,6 +64,9 @@ export default {
     },
     checkResign() {
       return this.resign;
+    },
+    setResign() {
+      this.resign = true;
     },
     setDraw() {
       this.draw = true;
@@ -162,6 +165,11 @@ export default {
       this.possibleMoves = data.legalMoves;
       if (data.checkmate) this.setCheckmate();
       if (data.insufficient) this.setDraw();
+    });
+
+    this.$socket.client.on('resign', () => {
+      console.log('resigned');
+      this.setResign();
     });
   },
 };

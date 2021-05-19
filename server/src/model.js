@@ -92,6 +92,7 @@ exports.endGame = (gameID, userIdentifier, result) => {
       if (changes === 0) return 'resignation unsuccessful for some reason';
       const statsChanges = userDB.updateUserStats(opponentIdentifier, 'won');
       if (statsChanges === 0) console.log('could not update user stats, user not registered?');
+      this.io.in(gameID).emit('resign');
       return 'resigned successfully';
     }
     case 'draw': {
