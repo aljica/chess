@@ -60,6 +60,17 @@ function validatePlayersAndGetOpponent(gameID, userIdentifier) {
   throw new Error('user not part of the game');
 }
 
+exports.resign = (gameID, sessionID) => {
+  const userIdentifier = getUserIdentifier(sessionID);
+  try {
+    // Make sure request-maker is part of the game.
+    validatePlayersAndGetOpponent(gameID, userIdentifier);
+    this.endGame(gameID, userIdentifier, 'resign');
+  } catch (e) {
+    throw new Error('resignation failed');
+  }
+};
+
 /**
  * Ends a game.
  * @param {Integer} gameID - The ID of the game
