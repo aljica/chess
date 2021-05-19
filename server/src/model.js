@@ -131,7 +131,7 @@ exports.addPlayerToGame = (gameID, sessionID) => {
       userDB.updateUserStats(player1, 'playedgames');
     }
   }
-  // this.io.emit('updatePlayers', sockets);
+  this.io.emit('updatePlayers', sockets);
   return sockets;
 };
 
