@@ -58,10 +58,10 @@ router.delete('/resign/:gameID', async (req, res) => {
     const { gameID } = req.params;
     const { sessionID } = req;
     const resign = model.resign(gameID, sessionID);
-    if (resign === 'resigned successfully') res.sendStatus(200);
-    else res.sendStatus(500);
+    if (resign === 'resigned successfully') res.status(200).send({ resign: 'success' });
+    else res.status(500).send({ resign: 'failed' });
   } catch (e) {
-    res.sendStatus(500);
+    res.status(500).send({ resign: 'failed' });
   }
 });
 

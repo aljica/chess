@@ -1,6 +1,7 @@
 <template>
   <div class="text-box col-md-4 col-md-offset-4" style="text-align: center">
-    <h1>Number Guess Game</h1>
+    <h1>Chess Game</h1>
+    <div v-if="checkResign()">GAME RESIGNED!</div>
     <div v-if="checkCheckmate()">CHECKMATE!</div>
     <div v-if="checkDraw()">GAME DRAWN!</div>
     <div v-if="checkWaiting()">
@@ -16,7 +17,7 @@
     <div v-else>
       <Board :id="gameID" :fen="fen" />
     </div>
-    <button @click="setfen()">x</button>
+    <button @click="resignGame()">RESIGN GAME</button>
   </div>
 </template>
 
@@ -41,9 +42,29 @@ export default {
       possibleMoves: [],
       checkmate: false,
       draw: false,
+      resign: false,
     };
   },
   methods: {
+    async resignGame() {
+      const self = this;
+      try {
+        const response = await fetch(`/api/resign/${this.gameID}`, {
+          method: 'DELETE',
+        });
+        const data = await response.json();
+        if (data.resign === 'success') {
+          self.resign = true;
+        } else {
+          console.log('you are not an active player...');
+        }
+      } catch (e) {
+        console.log('failed to resign game');
+      }
+    },
+    checkResign() {
+      return this.resign;
+    },
     setDraw() {
       this.draw = true;
     },
