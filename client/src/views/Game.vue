@@ -168,7 +168,6 @@ export default {
     });
 
     this.$socket.client.on('resign', () => {
-      console.log('resigned');
       this.setResign();
     });
   },
