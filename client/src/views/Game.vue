@@ -1,6 +1,7 @@
 <template>
   <div class="text-box col-md-4 col-md-offset-4" style="text-align: center">
     <h1>Number Guess Game</h1>
+    <div v-if="checkCheckmate()">GAME OVER!</div>
     <div v-if="checkWaiting()">
       <h1>Waiting for player</h1>
     </div>
@@ -37,9 +38,16 @@ export default {
       turn: null,
       selected: null,
       possibleMoves: [],
+      checkmate: false,
     };
   },
   methods: {
+    setCheckmate() {
+      this.checkmate = true;
+    },
+    checkCheckmate() {
+      return this.checkmate;
+    },
     numToAlpha(i) {
       const alpha = {
         1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'f', 7: 'g', 8: 'h',
@@ -123,6 +131,7 @@ export default {
       console.log('data', data);
       this.fen = data.fen;
       this.possibleMoves = data.legalMoves;
+      if (data.checkmate) this.setCheckmate();
     });
   },
 };
