@@ -228,6 +228,10 @@ exports.makeMove = async (gameID, move, sessionID) => {
       this.endGame(gameID, opponent, 'resign');
       console.log('checkmate');
     }
+    if (data.insufficient) {
+      this.endGame(gameID, userIdentifier, 'draw');
+      console.log('drawn due to insufficient');
+    }
     this.io.in(gameID).emit('moveMade', data);
     return data; // Object containing fen & legalMoves
   } catch (e) {

@@ -2,6 +2,7 @@
   <div class="text-box col-md-4 col-md-offset-4" style="text-align: center">
     <h1>Number Guess Game</h1>
     <div v-if="checkCheckmate()">GAME OVER!</div>
+    <div v-if="checkDraw()">GAME DRAWN!</div>
     <div v-if="checkWaiting()">
       <h1>Waiting for player</h1>
     </div>
@@ -39,9 +40,16 @@ export default {
       selected: null,
       possibleMoves: [],
       checkmate: false,
+      draw: false,
     };
   },
   methods: {
+    setDraw() {
+      this.draw = true;
+    },
+    checkDraw() {
+      return this.draw;
+    },
     setCheckmate() {
       this.checkmate = true;
     },
@@ -132,6 +140,7 @@ export default {
       this.fen = data.fen;
       this.possibleMoves = data.legalMoves;
       if (data.checkmate) this.setCheckmate();
+      if (data.insufficient) this.setDraw();
     });
   },
 };
