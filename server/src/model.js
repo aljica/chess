@@ -65,7 +65,7 @@ exports.resign = (gameID, sessionID) => {
   try {
     // Make sure request-maker is part of the game.
     validatePlayersAndGetOpponent(gameID, userIdentifier);
-    this.endGame(gameID, userIdentifier, 'resign');
+    return this.endGame(gameID, userIdentifier, 'resign');
   } catch (e) {
     throw new Error('resignation failed');
   }

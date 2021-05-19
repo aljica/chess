@@ -53,4 +53,16 @@ router.put('/move/:gameID', async (req, res) => {
   }
 });
 
+router.delete('/resign/:gameID', async (req, res) => {
+  try {
+    const { gameID } = req.params;
+    const { sessionID } = req;
+    const resign = model.resign(gameID, sessionID);
+    if (resign === 'resigned successfully') res.sendStatus(200);
+    else res.sendStatus(500);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
 module.exports = { router };
