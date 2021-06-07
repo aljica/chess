@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span v-if="usernameIsNull()">Username is null</span>
+    <span v-if="usernameIsNull()">Not logged in</span>
     <div v-else>
       <span>Username: {{ this.username }}</span>
       <br>
@@ -11,6 +11,10 @@
       <span>Drawn Games: {{ this.drawngames }}</span>
       <br>
       <span>Active Games: {{ this.gameids }}</span>
+      <br>
+      <button @click="logout()">
+        Logout
+      </button>
     </div>
   </div>
 </template>
@@ -46,6 +50,10 @@ export default {
       } catch (e) {
         console.log('not logged in');
       }
+    },
+    logout() {
+      fetch('/api/logout');
+      this.username = null;
     },
   },
   created() {

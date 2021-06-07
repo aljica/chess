@@ -47,7 +47,15 @@ exports.userLogin = async (sessionID, username, password) => {
 
 // User logout should automatically resign active games
 // i.e. check if user has current active games (will be a DB table for that).
-exports.userLogout = (username) => db.deleteUserSession(username);
+exports.userLogout = (sessionID) => {
+  try {
+    const username = db.getUserBySession(sessionID);
+    if (username === null) return false;
+    return db.deleteUserSession(username);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
 
 function hashPassword(password) {
   const saltRounds = 10;

@@ -39,4 +39,14 @@ router.get('/profile', async (req, res) => {
   }
 });
 
+router.get('/logout', async (req, res) => {
+  try {
+    const { sessionID } = req;
+    userModel.userLogout(sessionID);
+    res.sendStatus(200);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
 module.exports = { router };
