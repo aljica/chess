@@ -28,10 +28,7 @@ exports.userLogin = async (sessionID, username, password) => {
 
 // User logout should automatically resign active games
 // i.e. check if user has current active games (will be a DB table for that).
-exports.userLogout = async (sessionID, username) => {
-  console.log('x');
-  return 0;
-};
+exports.userLogout = (username) => db.deleteUserSession(username);
 
 function hashPassword(password) {
   const saltRounds = 10;
@@ -45,8 +42,12 @@ function hashPassword(password) {
 
 exports.addUser = async (username, password) => {
   try {
-    if (username.length === 0 || username.length > 15 || username === undefined) throw new Error('username problem');
-    if (password.length === 0 || password.length > 15 || password === undefined) throw new Error('password problem');
+    if (username.length === 0 || username.length > 15 || username === undefined) {
+      throw new Error('username problem');
+    }
+    if (password.length === 0 || password.length > 15 || password === undefined) {
+      throw new Error('password problem');
+    }
     const hash = await hashPassword(password);
     let user = new User(username, hash);
     user = JSON.stringify(user);

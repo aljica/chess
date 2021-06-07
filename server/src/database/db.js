@@ -18,6 +18,8 @@ exports.insertNewChessGame = () => {
   }
 };
 
+exports.deleteChessGame = (gameID) => db.prepare('DELETE FROM games WHERE id=?').run(gameID).changes;
+
 exports.updateFEN = (gameID, fen) => db.prepare('UPDATE games SET FEN = ? WHERE id = ?').run(fen, gameID);
 
 exports.getSessionIDs = (gameID) => db.prepare('SELECT sock1, sock2 FROM games WHERE id=?').get(gameID);
@@ -27,3 +29,5 @@ exports.addPlayerSocketToGame = (gameID, socketID, sockX) => db.prepare(`UPDATE 
 exports.getAllGames = () => db.prepare('SELECT id FROM games').all();
 
 exports.getFEN = (gameID) => db.prepare('SELECT FEN FROM games WHERE id=?').get(gameID);
+
+exports.getGamesByUserID = (userID) => db.prepare('SELECT id FROM games WHERE sock1 = ? OR sock2 = ?').all(userID, userID);

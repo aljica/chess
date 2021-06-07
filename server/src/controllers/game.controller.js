@@ -19,7 +19,8 @@ router.get('/createGame', (req, res) => {
   // and timestamp of latest game creation.
   // This should be a post request: play as white/black, time controls etc.
   try {
-    const gameID = model.createGame();
+    const { sessionID } = req;
+    const gameID = model.createGame(sessionID);
     res.status(200).send({ gameID });
   } catch (e) {
     res.sendStatus(500);
@@ -49,6 +50,18 @@ router.put('/move/:gameID', async (req, res) => {
     else res.status(200).send(data);
   } catch (e) {
     res.sendStatus(500);
+  }
+});
+
+router.delete('/resign/:gameID', async (req, res) => {
+  try {
+    const { gameID } = req.params;
+    const { sessionID } = req;
+    const resign = model.resign(gameID, sessionID);
+    if (resign === 'resigned successfully') res.status(200).send({ resign: 'success' });
+    else res.status(500).send({ resign: 'failed' });
+  } catch (e) {
+    res.status(500).send({ resign: 'failed' });
   }
 });
 

@@ -1,6 +1,9 @@
 <template>
   <div class="text-box col-md-4 col-md-offset-4" style="text-align: center">
-    <h1>Number Guess Game</h1>
+    <h1>Chess Game</h1>
+    <div v-if="checkResign()">GAME RESIGNED!</div>
+    <div v-if="checkCheckmate()">CHECKMATE!</div>
+    <div v-if="checkDraw()">GAME DRAWN!</div>
     <div v-if="checkWaiting()">
       <h1>Waiting for player</h1>
     </div>
@@ -14,7 +17,7 @@
     <div v-else>
       <Board :id="gameID" :fen="fen" />
     </div>
-    <button @click="setfen()">x</button>
+    <button @click="resignGame()">RESIGN GAME</button>
   </div>
 </template>
 
@@ -37,9 +40,46 @@ export default {
       turn: null,
       selected: null,
       possibleMoves: [],
+      checkmate: false,
+      draw: false,
+      resign: false,
     };
   },
   methods: {
+    async resignGame() {
+      const self = this;
+      try {
+        const response = await fetch(`/api/resign/${this.gameID}`, {
+          method: 'DELETE',
+        });
+        const data = await response.json();
+        if (data.resign === 'success') {
+          self.setResign();
+        } else {
+          console.log('you are not an active player...');
+        }
+      } catch (e) {
+        console.log('failed to resign game');
+      }
+    },
+    checkResign() {
+      return this.resign;
+    },
+    setResign() {
+      this.resign = true;
+    },
+    setDraw() {
+      this.draw = true;
+    },
+    checkDraw() {
+      return this.draw;
+    },
+    setCheckmate() {
+      this.checkmate = true;
+    },
+    checkCheckmate() {
+      return this.checkmate;
+    },
     numToAlpha(i) {
       const alpha = {
         1: 'a', 2: 'b', 3: 'c', 4: 'd', 5: 'e', 6: 'f', 7: 'g', 8: 'h',
@@ -123,6 +163,12 @@ export default {
       console.log('data', data);
       this.fen = data.fen;
       this.possibleMoves = data.legalMoves;
+      if (data.checkmate) this.setCheckmate();
+      if (data.insufficient) this.setDraw();
+    });
+
+    this.$socket.client.on('resign', () => {
+      this.setResign();
     });
   },
 };
