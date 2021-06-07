@@ -11,10 +11,9 @@ const expressSession = require('express-session');
 const socketIOSession = require('express-socket.io-session');
 const express = require('express');
 const http = require('http');
-const cookieParser = require('cookie-parser');
 
 console.logLevel = 4; // Enables debug output
-const publicPath = path.join(__dirname, '..', '..', 'client', 'dist');
+path.join(__dirname, '..', '..', 'client', 'dist');
 const port = 8989; // The port that the server will listen to
 const app = express(); // Creates express app
 
@@ -60,9 +59,6 @@ io.use(socketIOSession(session, {
   saveUninitialized: true,
 }));
 
-// Serve client
-//app.use(express.static(publicPath));
-
 // Bind REST controllers to /api/*
 const game = require('./controllers/game.controller.js');
 const auth = require('./controllers/auth.controller.js');
@@ -77,16 +73,6 @@ model.init({ io });
 
 // Handle connected socket.io sockets
 io.on('connection', (socket) => {
-  //console.log('unique socketid', socket.id);
-  //console.log('express-sessionID from socket', socket.handshake.sessionID);
-  // console.log('entire socket handshake', socket.handshake);
-
-  //socket.on('updateRandom', 4);
-  /*socket.on('updateRandom', (data) => {
-    console.log(data);
-    io.emit('event', data);
-  });*/
-
   socket.on('joinGame', (gameID) => {
     socket.join(gameID);
   });
