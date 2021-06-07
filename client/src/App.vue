@@ -34,6 +34,9 @@
             <li v-on:click="redirect('/login')">
               <a style="cursor: pointer;">Login</a>
             </li>
+            <li v-on:click="redirect('/profile')">
+              <a style="cursor: pointer;">Profile</a>
+            </li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->

@@ -1,4 +1,4 @@
-const spawn = require('child_process').spawn;
+const { spawn } = require('child_process');
 const db = require('./database/db');
 const userDB = require('./database/userDB');
 
@@ -37,16 +37,9 @@ exports.createGame = (sessionID) => {
 
   // Check if user is allowed to create a new game.
   if (userExceededGameLimit(userIdentifier)) throw new Error('User is already in max number of games, cannot create a new one.');
-  /* const userGames = db.getGamesByUserID(userIdentifier);
-  const gameLimit = 1; // Number of concurrent games user is allowed.
-  // TODO: Should be fetched from database (premium users can play more games at once).
-  console.log('userGames', userGames);
-  if (userGames.length >= gameLimit) throw new Error('User is already in max number of games, cannot create a new one.'); */
 
   // If user is not currently in a game, let them create a new one.
   const gameID = db.insertNewChessGame();
-  // this.io.emit('updateGames', this.getGames());
-  // exports.io.emit("event", 4);
   return gameID;
 };
 
@@ -186,7 +179,7 @@ exports.joinGame = async (gameID, sessionID) => {
     const players = this.getPlayersInGame(gameID);
     const fen = this.getGameFEN(gameID).FEN;
     const legalMoves = await this.chessLogic(fen, '');
-    const data = { players: players, fen: fen, legalMoves: legalMoves };
+    const data = { players, fen, legalMoves };
     this.io.in(gameID).emit('playerJoined', players);
     return data;
   } catch (e) {

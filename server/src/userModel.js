@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 
 const db = require('./database/userDB');
+const gameDB = require('./database/db');
 const User = require('./models/user.model');
 
 function checkPassword(password, hash) {
@@ -11,6 +12,24 @@ function checkPassword(password, hash) {
     });
   });
 }
+
+// userProfile should return username, number of played games, number of lost games,
+// number of drawn games, and all gameID's of currently active games.
+exports.userProfile = async (sessionID) => {
+  try {
+    const username = db.getUserBySession(sessionID);
+    if (username === null) return false;
+    const stats = db.getUserStats(username);
+    const gameIDs = gameDB.getGamesByUserID(username);
+    if (gameIDs !== null) {
+      const data = { stats, gameIDs };
+      return data;
+    }
+    return stats;
+  } catch (e) {
+    throw new Error(e);
+  }
+};
 
 exports.userLogin = async (sessionID, username, password) => {
   try {
@@ -28,7 +47,15 @@ exports.userLogin = async (sessionID, username, password) => {
 
 // User logout should automatically resign active games
 // i.e. check if user has current active games (will be a DB table for that).
-exports.userLogout = (username) => db.deleteUserSession(username);
+exports.userLogout = (sessionID) => {
+  try {
+    const username = db.getUserBySession(sessionID);
+    if (username === null) return false;
+    return db.deleteUserSession(username);
+  } catch (e) {
+    throw new Error(e);
+  }
+};
 
 function hashPassword(password) {
   const saltRounds = 10;

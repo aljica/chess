@@ -4,6 +4,7 @@ import GameView from '../views/Game.vue';
 import LobbyView from '../views/Lobby.vue';
 import RegisterView from '../views/Register.vue';
 import LoginView from '../views/Login.vue';
+import ProfileView from '../views/Profile.vue';
 // import store from '../store';
 
 Vue.use(VueRouter);
@@ -14,6 +15,7 @@ const routes = [
   { path: '/game/:gameID', component: GameView },
   { path: '/register', component: RegisterView },
   { path: '/login', component: LoginView },
+  { path: '/profile', component: ProfileView },
 ];
 
 const router = new VueRouter({
