@@ -29,4 +29,14 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.get('/profile', async (req, res) => {
+  try {
+    const { sessionID } = req;
+    const data = await userModel.userProfile(sessionID);
+    res.status(200).send(data);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
 module.exports = { router };
